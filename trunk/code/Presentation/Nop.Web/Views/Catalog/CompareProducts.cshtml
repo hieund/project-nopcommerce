@@ -1,0 +1,167 @@
+﻿@model CompareProductsModel
+@{
+    Layout = "~/Views/Shared/_root.cshtml";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.CompareProducts").Text);
+}
+@using Nop.Web.Models.Catalog;
+@{
+    string columnWidth = "";
+    if (Model.Products.Count > 0)
+    {
+        columnWidth = Math.Round((decimal)(90M / Model.Products.Count), 0).ToString() + "%";
+    }
+
+
+    var specificationAttributes = new List<ProductSpecificationModel>();
+    foreach (var product in Model.Products)
+    {
+        foreach (var attribute in product.SpecificationAttributeModels)
+        {
+            if (specificationAttributes.FirstOrDefault(sa => sa.SpecificationAttributeId == attribute.SpecificationAttributeId) == null)
+            {
+                specificationAttributes.Add(attribute);
+            }
+        }
+    }
+}
+<div class="nav"><a href="/">Trang chủ </a>&rsaquo; So sánh</div>
+<div class="page compare-products-page">
+    @*<div class="page-title">
+        <h1>@T("Products.Compare.Title")</h1>
+    </div>*@
+    <div class="page-body">
+        <div class="content">
+            <div class="contentrow">
+                <div class="contentleft">
+                    <div class="base-layer">
+                        @if (Model.Products.Count > 0)
+                        {
+@*<a href="#" onclick="setLocation('@Url.RouteUrl("ClearCompareList")')" class="clear-list">@T("Products.Compare.Clear")</a>*@
+                            <table class="compare-products-table" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                    <tr class="overview">
+                                        @*<td>
+                                            &nbsp;
+                                        </td>
+                                        @foreach (var product in Model.Products)
+                                        {
+                                            <td style="width: @columnWidth;" class="a-center">
+                                                <div>
+                                                    <p class="a-center">
+                                                        <input type="button" value="@T("Common.Remove")" title="@T("Common.Remove")" class="button-2 remove-button" onclick="setLocation('@Url.RouteUrl("RemoveProductFromCompareList", new { productId = product.Id })')" />
+                                                    </p>
+                                                    <p class="a-center">
+                                                        <img alt="@product.DefaultPictureModel.AlternateText" src="@product.DefaultPictureModel.ImageUrl" title="@product.DefaultPictureModel.Title" />
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        }*@
+                                        <td class="table-row boder_bottom">
+                                            <div class="left-container13 "></div>
+                                        </td>
+                                        @{
+                            int i = 1;
+                                        }
+                                        @foreach (var product in Model.Products)
+                                        {
+                                            <td class="table-row boder_bottom td-left">
+                                                <div class="@(i == Model.Products.Count ? "right-container13" : "left-container23")">
+                                                    <div class="close">
+                                                        <input type="button" value="@T("Common.Remove")" title="@T("Common.Remove")" class="button-2 remove-button" onclick="setLocation('@Url.RouteUrl("RemoveProductFromCompareList", new { productId = product.Id })    ')" />
+                                                    </div>
+                                                    <p align="center">
+                                                        <a href="@Url.RouteUrl("Product", new { SeName = product.SeName })">
+                                                            <img alt="@product.DefaultPictureModel.AlternateText" src="@product.DefaultPictureModel.ImageUrl" title="@product.DefaultPictureModel.Title" /></a>
+                                                    </p>
+                                                    <p><a href="@Url.RouteUrl("Product", new { SeName = product.SeName })">@product.Name</a></p>
+                                                    <p class="price">@product.ProductPrice.Price</p>
+                                                </div>
+                                            </td>
+                                            { i = i + 1; }
+                                        }
+                                    </tr>
+                                    @*<tr class="product-name">
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        @foreach (var product in Model.Products)
+                                        {
+                                            <td style="width: @columnWidth;" class="a-center">
+                                                <a class="link" href="@Url.RouteUrl("Product", new { SeName = product.SeName })">@product.Name</a>
+                                            </td>
+                                        }
+                                    </tr>*@
+                                    @*<tr class="product-price">
+                                        <td>
+                                            @T("Products.Compare.Price")
+                                        </td>
+                                        @foreach (var product in Model.Products)
+                                        {
+                                            <td style="width: @columnWidth;" class="a-center">
+                                                @product.ProductPrice.Price
+                                            </td>
+                                        }
+                                    </tr>*@
+                                    @if (Model.IncludeShortDescriptionInCompareProducts)
+                                    {
+                                        @Html.Raw(Model.HtmlCompareProducts)
+                                        @*<tr class="short-description">
+                                            @{i = 1;}
+                                            <td class="border-right bg_gray">
+                                                @T("Products.Compare.ShortDescription")
+                                            </td>
+
+                                            @foreach (var product in Model.Products)
+                                            {
+                                                <td class="border-left bg_gray">
+                                                    @Html.Raw(product.ShortDescription)
+                                                </td>
+                                                { i = i + 1; }
+                                            }
+                                        </tr>*@
+                                    }
+                                    
+                                    @Html.Widget("compareproducts_row")
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                </div>
+                <div class="contentright">
+                    <div class="selectproduct">
+                        <p class="tt_selectproduct">chọn Sản phẩm để so sánh </p>
+                        @Html.Action("SearchBoxForCompare")
+                    </div>
+                    @*<div class="viewpro">
+                        <div class="titleview">Sản phẩm tương tự</div>
+                        <ul>
+                            <li><a href="#">
+                                <img src="images/product.jpg" />
+                            </a>
+                                <p class="titleviewpro">Samsung S5830 </p>
+                            </li>
+                            <li><a href="#">
+                                <img src="images/product.jpg" />
+                            </a>
+                                <p class="titleviewpro">Samsung S5830</p>
+                            </li>
+                            <li><a href="#">
+                                <img src="images/product.jpg" />
+                            </a>
+                                <p class="titleviewpro">Samsung S5830 </p>
+                            </li>
+                            <li><a href="#">
+                                <img src="images/product.jpg" />
+                            </a>
+                                <p class="titleviewpro">Samsung S5830</p>
+                            </li>
+                        </ul>
+                        <p align="right" style="padding-right: 8px"><a href="#" class="linkblue">Xem tất cả </a></p>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

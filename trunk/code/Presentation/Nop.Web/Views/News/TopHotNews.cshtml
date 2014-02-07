@@ -1,0 +1,31 @@
+﻿@model NewsItemListModel
+@using Nop.Web.Extensions;
+@using Nop.Web.Models.News;
+
+@if(Model.NewsItems.Count > 0)
+{
+<div class="hotnews">
+    <div class="hotnews_left">
+        <img src="@Model.NewsItems[0].DefaultPictureModel.FullSizeImageUrl" alt="@Model.NewsItems[0].DefaultPictureModel.AlternateText" title="@Model.NewsItems[0].DefaultPictureModel.Title" align="left" />
+        <h2><a href="@Url.RouteUrl("NewsItem", new { SeName = Model.NewsItems[0].SeName })">@Model.NewsItems[0].Title</a></h2>
+        <p class="date">@Model.NewsItems[0].CreatedOn.ToString("D")</p>
+        <p>@Html.Raw(Model.NewsItems[0].Short)</p>
+    </div>
+    @if (Model.NewsItems.Count > 1)
+    {
+        <div class="hotnews_right">
+            <ul>
+                @for (int i = 1; i < Model.NewsItems.Count; i++)
+                {
+                    <li><a href="@Url.RouteUrl("NewsItem", new { SeName = Model.NewsItems[i].SeName })">
+                        <img src="@Model.NewsItems[i].DefaultPictureModel.ImageUrl" alt="@Model.NewsItems[i].DefaultPictureModel.AlternateText" title="@Model.NewsItems[i].DefaultPictureModel.Title" align="left" /></a>
+                        <a href="@Url.RouteUrl("NewsItem", new { SeName = Model.NewsItems[i].SeName })">@Model.NewsItems[i].Title</a></li>
+                }
+            </ul>
+        </div>
+    }
+</div>
+<p>
+    <img src="/Themes/DefaultClean/Content/images/line.png" width="869" height="8" />
+</p>
+}

@@ -1,0 +1,882 @@
+﻿@model CategoryModel
+
+@using Telerik.Web.Mvc.UI;
+@Html.ValidationSummary(false)
+@Html.HiddenFor(model => model.Id)
+@Html.Telerik().TabStrip().Name("category-edit").Items(x =>
+{
+    x.Add().Text(T("Admin.Catalog.Categories.Info").Text).Content(TabInfo().ToHtmlString()).Selected(true);
+    x.Add().Text(T("Admin.Common.SEO").Text).Content(TabSeo().ToHtmlString());
+    x.Add().Text(T("Admin.Catalog.Categories.Products").Text).Content(TabProducts().ToHtmlString());
+    //x.Add().Text(T("Admin.Catalog.Categories.Discounts").Text).Content(TabDiscounts().ToHtmlString());
+    //x.Add().Text(T("Admin.Catalog.Categories.Acl").Text).Content(TabAcl().ToHtmlString());
+    //x.Add().Text(T("Admin.Catalog.Categories.Stores").Text).Content(TabStores().ToHtmlString());
+
+    //extention
+    x.Add().Text(T("Admin.Catalog.Categories.ProductPropertyGroup").Text).Content(TabProductPropertyGroup().ToHtmlString());
+    x.Add().Text(T("Admin.Catalog.Categories.CompareTemplate").Text).Content(TabCompareTemplate().ToHtmlString());
+
+    //generate an event
+    EngineContext.Current.Resolve<IEventPublisher>().Publish(new AdminTabStripCreated(x, "category-edit"));
+})
+@helper TabInfo()
+{ 
+    @(Html.LocalizedEditor<CategoryModel, CategoryLocalizedModel>("category-info-localized",
+                @<table class="adminContent">
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Locales[item].Name):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => Model.Locales[item].Name)
+                            @Html.ValidationMessageFor(model => model.Locales[item].Name)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Locales[item].Description):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.Locales[item].Description, "RichEditor")
+                            @Html.ValidationMessageFor(model => model.Locales[item].Description)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            @Html.HiddenFor(model => model.Locales[item].LanguageId)
+                        </td>
+                    </tr>
+                </table>
+                ,
+                @<table class="adminContent">
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Name):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.Name)
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Description):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(x => x.Description, "RichEditor")
+                            @Html.ValidationMessageFor(model => model.Description)
+                        </td>
+                    </tr>
+                </table>
+            ))
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.CategoryTemplateId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.CategoryTemplateId, Model.AvailableCategoryTemplates)
+                @Html.ValidationMessageFor(model => model.CategoryTemplateId)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.PictureId)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PictureId)
+                @Html.ValidationMessageFor(model => model.PictureId)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ParentCategoryId):
+            </td>
+            <td class="adminData">
+                @(Html.Telerik().ComboBoxFor(x => x.ParentCategoryId).BindTo(Model.ParentCategories).Encode(true)
+                            .DataBinding(x => x.Ajax().Enabled(true).Select("AllCategories", "Category", new { selectedId = Model.ParentCategoryId })))
+                @Html.ValidationMessageFor(model => model.ParentCategoryId)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.PriceRanges):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.PriceRanges)
+                @Html.ValidationMessageFor(model => model.PriceRanges)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ShowOnHomePage):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.ShowOnHomePage)
+                @Html.ValidationMessageFor(model => model.ShowOnHomePage)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Published):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.Published)
+                @Html.ValidationMessageFor(model => model.Published)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.DisplayOrder):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.DisplayOrder)
+                @Html.ValidationMessageFor(model => model.DisplayOrder)
+            </td>
+        </tr>
+    </table>
+}
+@helper TabSeo()
+{
+    @(Html.LocalizedEditor<CategoryModel, CategoryLocalizedModel>("category-seo-localized",
+               @<table class="adminContent">
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.Locales[item].MetaKeywords):
+                       </td>
+                       <td class="adminData">
+                           @Html.EditorFor(model => model.Locales[item].MetaKeywords)
+                           @Html.ValidationMessageFor(model => model.Locales[item].MetaKeywords)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.Locales[item].MetaDescription):
+                       </td>
+                       <td class="adminData">
+                           @Html.TextAreaFor(model => model.Locales[item].MetaDescription)
+                           @Html.ValidationMessageFor(model => model.Locales[item].MetaDescription)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.Locales[item].MetaTitle):
+                       </td>
+                       <td class="adminData">
+                           @Html.EditorFor(model => model.Locales[item].MetaTitle)
+                           @Html.ValidationMessageFor(model => model.Locales[item].MetaTitle)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.Locales[item].SeName):
+                       </td>
+                       <td class="adminData">
+                           @Html.EditorFor(model => model.Locales[item].SeName)
+                           @Html.ValidationMessageFor(model => model.Locales[item].SeName)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td colspan="2">
+                           @Html.HiddenFor(model => model.Locales[item].LanguageId)
+                       </td>
+                   </tr>
+               </table>
+               ,
+               @<table class="adminContent">
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.MetaKeywords):
+                       </td>
+                       <td class="adminData">
+                           @Html.EditorFor(x => x.MetaKeywords)
+                           @Html.ValidationMessageFor(model => model.MetaKeywords)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.MetaDescription):
+                       </td>
+                       <td class="adminData">
+                           @Html.TextAreaFor(x => x.MetaDescription)
+                           @Html.ValidationMessageFor(model => model.MetaDescription)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.MetaTitle):
+                       </td>
+                       <td class="adminData">
+                           @Html.EditorFor(x => x.MetaTitle)
+                           @Html.ValidationMessageFor(model => model.MetaTitle)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.SeName):
+                       </td>
+                       <td class="adminData">
+                           @Html.EditorFor(x => x.SeName)
+                           @Html.ValidationMessageFor(model => model.SeName)
+                       </td>
+                   </tr>
+               </table>)) 
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AllowCustomersToSelectPageSize):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.AllowCustomersToSelectPageSize)
+                @Html.ValidationMessageFor(model => model.AllowCustomersToSelectPageSize)
+            </td>
+        </tr>
+        <tr id="pnlPageSize">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.PageSize):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.PageSize)
+                @Html.ValidationMessageFor(model => model.PageSize)
+            </td>
+        </tr>
+        <tr id="pnlPageSizeOptions">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.PageSizeOptions):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.PageSizeOptions)
+                @Html.ValidationMessageFor(model => model.PageSizeOptions)
+            </td>
+        </tr>
+    </table>
+}
+@helper TabProducts()
+{
+    if (Model.Id > 0)
+    {
+        var gridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSize;
+    <table class="adminContent">
+        <tr>
+            <td>
+                @(Html.Telerik().Grid<CategoryModel.CategoryProductModel>()
+                .Name("products-grid")
+                    .DataKeys(keys =>
+                    {
+                        keys.Add(x => x.Id);
+                    })
+                    .DataBinding(dataBinding =>
+                    {
+                        dataBinding.Ajax()
+                            .Select("ProductList", "Category", new { categoryId = Model.Id })
+                            .Update("ProductUpdate", "Category")
+                            .Delete("ProductDelete", "Category");
+                    })
+                    .Columns(columns =>
+                    {
+                        columns.Bound(x => x.ProductName)
+                            .Width(500)
+                            .ReadOnly();
+                        columns.Bound(x => x.IsFeaturedProduct)
+                            .Width(100)
+                            .Centered();
+                        columns.Bound(x => x.DisplayOrder1)
+                            .Width(100)
+                            .Centered();
+                        columns.Command(commands =>
+                        {
+                            commands.Edit().Text(T("Admin.Common.Edit").Text);
+                            commands.Delete().Text(T("Admin.Common.Delete").Text);
+                        })
+                        .Width(180);
+                    })
+                    .Pageable(settings => settings.PageSize(gridPageSize).Position(GridPagerPosition.Both))
+                    .EnableCustomBinding(true))
+            </td>
+        </tr>
+        <tr>
+            <td width="100%">
+                <input type="submit" id="btnAddNewProduct" name="btnAddNewProduct" value="@T("Admin.Catalog.Categories.Products.AddNew")" onclick="javascript:OpenWindow('@(Url.Action("ProductAddPopup", "Category", new { categoryId = Model.Id, btnId = "btnRefreshProducts", formId = "category-form" }))    ', 800, 800, true); return false;" class="t-button" />
+                <input type="submit" id="btnRefreshProducts" name="btnRefreshProducts" style="display: none" />
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#btnRefreshProducts').click(function () {
+                            //refresh grid
+                            var optionsGrid = $("#products-grid");
+                            optionsGrid.data('tGrid').ajaxRequest();
+
+                            //return false to don't reload a page
+                            return false;
+                        });
+                    });
+                </script>
+            </td>
+        </tr>
+    </table>
+    }
+    else
+    {
+    @T("Admin.Catalog.Categories.Products.SaveBeforeEdit")
+    }
+}
+
+@helper TabDiscounts()
+{
+    if (Model.AvailableDiscounts != null && Model.AvailableDiscounts.Count > 0)
+    {
+        foreach (var discount in Model.AvailableDiscounts)
+        {
+    <input type="checkbox" name="SelectedDiscountIds" value="@discount.Id"
+            @if (Model.SelectedDiscountIds != null && Model.SelectedDiscountIds.Contains(discount.Id))
+            {
+                <text>checked="checked"</text>
+            }
+            />@discount.Name
+    <br />
+        }
+    }
+    else
+    {
+    @T("Admin.Catalog.Categories.Discounts.NoDiscounts")
+    }
+}
+@helper TabAcl()
+{
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#@Html.FieldIdFor(model => model.SubjectToAcl)").click(toggleAcl);
+        
+            toggleAcl();
+        });
+
+
+        function toggleAcl() {
+            if ($('#@Html.FieldIdFor(model => model.SubjectToAcl)').is(':checked')) {
+                $('#pnl-acl').show();
+            }
+            else {
+                $('#pnl-acl').hide();
+            }
+        }
+
+    </script>
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.SubjectToAcl):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.SubjectToAcl)
+                @Html.ValidationMessageFor(model => model.SubjectToAcl)
+            </td>
+        </tr>
+        <tr id="pnl-acl">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AvailableCustomerRoles):
+            </td>
+            <td class="adminData">
+                @if (Model.AvailableCustomerRoles != null && Model.AvailableCustomerRoles.Count > 0)
+                {
+                    foreach (var customerRole in Model.AvailableCustomerRoles)
+                    {
+                    <div>
+                        <input type="checkbox" name="SelectedCustomerRoleIds" value="@customerRole.Id" checked="@(Model.SelectedCustomerRoleIds != null && Model.SelectedCustomerRoleIds.Contains(customerRole.Id))" />@customerRole.Name
+                    </div>
+                    }
+                }
+                else
+                {
+                    <div>No customer roles defined</div>
+                }</td>
+        </tr>
+    </table>
+}
+
+@helper TabStores()
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#@Html.FieldIdFor(model => model.LimitedToStores)").click(toggleStoreMapping);
+        
+            toggleStoreMapping();
+        });
+
+
+        function toggleStoreMapping() {
+            if ($('#@Html.FieldIdFor(model => model.LimitedToStores)').is(':checked')) {
+                $('#pnl-available-stores').show();
+            }
+            else {
+                $('#pnl-available-stores').hide();
+            }
+        }
+
+    </script>
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.LimitedToStores):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.LimitedToStores)
+                @Html.ValidationMessageFor(model => model.LimitedToStores)
+            </td>
+        </tr>
+        <tr id="pnl-available-stores">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AvailableStores):
+            </td>
+            <td class="adminData">
+                @if (Model.AvailableStores != null && Model.AvailableStores.Count > 0)
+                {
+                    foreach (var store in Model.AvailableStores)
+                    {
+                    <div>
+                        <input type="checkbox" name="SelectedStoreIds" value="@store.Id" checked="@(Model.SelectedStoreIds != null && Model.SelectedStoreIds.Contains(store.Id))" />@store.Name
+                    </div>
+                    }
+                }
+                else
+                {
+                    <div>No stores defined</div>
+                }</td>
+        </tr>
+    </table>
+}
+@helper TabProductPropertyGroup()
+{
+    if (Model.Id > 0)
+    {
+        var gridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSize;
+    <table class="adminContent">
+        @*<tr>
+            <td width="100%">
+                <input type="submit" id="btnAddNewProductPropertyGroup" name="btnAddNewProductPropertyGroup" value="@T("Admin.Catalog.Categories.ProductPropertyGroup.AddNew")" onclick="javascript:OpenWindow('@(Url.Action("ProductPropertyGroupAddPopup", "Category", new { categoryId = Model.Id, btnId = "btnAddNewProductPropertyGroup", formId = "productpropertygroup-form" }))    ', 800, 700, true); return false;" class="t-button" />
+                <input type="submit" id="btnRefreshProductPropertyGroup" name="btnRefreshProductPropertyGroup" style="display: none" />
+            </td>
+        </tr>*@
+        <tr>
+            <td>
+                @(Html.Telerik().Grid<CategoryModel.ProductPropertyGroupModel>()
+                .Name("productpropertiesgroup-grid")
+                    .DataKeys(keys =>
+                    {
+                        keys.Add(x => x.Id);
+                    })
+                    .ToolBar(x => x.Insert().ButtonType(GridButtonType.ImageAndText).Text(T("Admin.Catalog.Categories.ProductPropertyGroup.AddNew").Text))
+                    .DataBinding(dataBinding =>
+                    {
+                        dataBinding.Ajax()
+                            .Select("ProductPropertyGroupList", "Category", new { categoryId = Model.Id })
+                            .Insert("ProductPropertyGroupInsert", "Category", new { categoryId = Model.Id })
+                            .Update("ProductPropertyGroupUpdate", "Category")
+                            .Delete("ProductPropertyGroupDelete", "Category");
+                    })
+                    .Columns(columns =>
+                    {
+                        columns.Bound(x => x.Id).Width(60).HtmlAttributes(new { style = "text-align:right" }).ReadOnly();
+                        columns.Bound(x => x.Name).ClientTemplate("<h3><#= Name #></h3>").Width(150);
+                        columns.Bound(x => x.Description).Width(200);
+                        columns.Bound(x => x.IsMapping).Width(50).Centered();
+                        columns.Bound(x => x.IsActived).Width(50).Centered();
+                        columns.Bound(x => x.DisplayOrder1).Width(50).Centered();
+                        columns.Command(commands =>
+                        {
+                            commands.Edit().ButtonType(GridButtonType.BareImage);
+                            commands.Delete().ButtonType(GridButtonType.BareImage);
+                        }).Width(70).HtmlAttributes(new { style = "text-align:center" });
+                    })
+                   .ClientEvents(events => events.OnRowDataBound("productPropertyGroup_onRowDataBound"))
+                        .DetailView(details => details.ClientTemplate(
+                            Html.Telerik().Grid<CategoryModel.ProductPropertyModel>()
+                                .Name("Groups_<#= Id #>")
+                                .DataKeys(x =>
+                                {
+                                    x.Add(y => y.Id).RouteKey("Id");
+                                })
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(o => o.Id).Width(55).ReadOnly().HtmlAttributes(new { style = "text-align:right" });
+                                    columns.Bound(o => o.Name).ClientTemplate("<h4><#= Name #></h4>").Width(150);
+                                    columns.Bound(o => o.Description).Width(200);
+                                    columns.Bound(o => o.PropertyType).ClientTemplate("<#= returnPropertyType(PropertyType) #>").Width(100);
+                                    columns.Bound(o => o.IsMapping).Width(50);
+                                    columns.Bound(o => o.IsActived).Width(50);
+                                    columns.Bound(o => o.IsFilterExtension).Width(50);
+                                    columns.Bound(o => o.DisplayOrder1).Width(50);
+                                    columns.Command(commands =>
+                                    {
+                                        commands.Edit().ButtonType(GridButtonType.BareImage);
+                                        commands.Delete().ButtonType(GridButtonType.BareImage);
+                                        commands.Custom("ValueMapping").Text(T("Admin.Catalog.Categories.ProductPropertyValue.AddValueMapping").Text)
+                                            .DataRouteValues(route => route.Add(o => o.Id).RouteKey("Id"))
+                                            .Ajax(true)
+                                            .Action("ValueMapping", "Category");
+                                    }).Width(50).HtmlAttributes(new { style = "text-align: center" });
+                                })
+
+                                    .ClientEvents(events => events.OnRowDataBound("productProperty_onRowDataBound"))
+                                    .DetailView(propertyvaluedetails => propertyvaluedetails.ClientTemplate(
+                                            Html.Telerik().Grid<CategoryModel.ProductPropertyValueModel>()
+                                            .Name("Property_<#= Id #>")
+                                            .DataKeys(x =>
+                                            {
+                                                x.Add(y => y.Id).RouteKey("Id");
+                                            })
+                                            .Columns(columns =>
+                                            {
+                                                columns.Bound(v => v.Id).Width(30).ReadOnly().HtmlAttributes(new { style = "text-align:right" });
+                                                columns.Bound(v => v.Name).Width(300);
+                                                columns.Bound(v => v.Value).Width(100);
+                                                columns.Bound(v => v.IsActived).Width(100);
+                                                columns.Bound(v => v.DisplayOrder1).Width(100);
+                                                columns.Bound(v => v.ProductPropertyId).Hidden(true);
+                                                columns.Command(commands =>
+                                                {
+                                                    commands.Edit().ButtonType(GridButtonType.BareImage);
+                                                    commands.Delete().ButtonType(GridButtonType.BareImage);
+                                                }).Width(200);
+                                            })
+                                            .DataBinding(dataBinding =>
+                                            {
+                                                dataBinding.Ajax().Select("ProductPropertyValueList", "Category", new { propertyId = "<#= Id #>" })
+                                                                    .Insert("ProductPropertyValueInsert", "Category", new { propertyId = "<#= Id #>" })
+                                                                    .Update("ProductPropertyValueUpdate", "Category")
+                                                                    .Delete("ProductPropertyValueDelete", "Category");
+                                            })
+                                            .ToolBar(x => x.Insert().ButtonType(GridButtonType.ImageAndText).Text(T("Admin.Catalog.Categories.ProductPropertyValue.AddNew").Text))
+                                            .Editable(x => x.Mode(GridEditMode.InLine))
+                                            .ToHtmlString()))
+                                            .DataBinding(dataBinding =>
+                                            {
+                                                dataBinding.Ajax().Select("ProductPropertyList", "Category", new { groupId = "<#= Id #>" })
+                                                                  .Insert("ProductPropertyInsert", "Category", new { groupId = "<#= Id #>" })
+                                                                  .Update("ProductPropertyUpdate", "Category")
+                                                                  .Delete("ProductPropertyDelete", "Category");
+                                            })
+                                .ToolBar(x => x.Insert().ButtonType(GridButtonType.ImageAndText).Text(T("Admin.Catalog.Categories.ProductProperty.AddNew").Text))
+                                .Editable(x => x.Mode(GridEditMode.InLine))
+                                .ClientEvents(x => x.OnEdit("onProductProperty"))
+                                .ClientEvents(x => x.OnError("Grid_onError"))
+                                .ClientEvents(events => events.OnComplete("onComplete"))
+                                .ClientEvents(events => events.OnEdit("onProductPropertyEdit"))
+                                .ToHtmlString()
+                                ))
+
+                .Pageable(settings => settings.PageSize(gridPageSize).Position(GridPagerPosition.Both))
+                                .EnableCustomBinding(true)
+                                .Editable(x => x.Mode(GridEditMode.InLine))
+            )
+            </td>
+        </tr>
+        <tr>
+            <td width="100%">
+                @*   <input type="submit" id="btnAddNewProductPropertyGroup" name="btnAddNewProductPropertyGroup" value="@T("Admin.Catalog.Categories.ProductPropertyGroup.AddNew")" onclick="javascript:OpenWindow('@(Url.Action("ProductPropertyGroupAddPopup", "Category", new { categoryId = Model.Id, btnId = "btnAddNewProductPropertyGroup", formId = "productpropertygroup-form" }))    ', 800, 700, true); return false;" class="t-button" />*@
+                <input type="submit" id="btnRefreshProductPropertyGroup" name="btnRefreshProductPropertyGroup" style="display: none" />
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#btnRefreshProductPropertyGroup').click(function () {
+                            //refresh grid
+                            var optionsGrid = $("#productpropertiesgroup-grid");
+                            optionsGrid.data('tGrid').ajaxRequest();
+
+                            //return false to don't reload a page
+                            return false;
+                        });
+                    });
+                    function expandFirstRow(grid, row) {
+                        if (grid.$rows().index(row) == 0) {
+                            grid.expandRow(row);
+                        }
+                    }
+                    function expandRow(grid, row) {
+                        grid.expandRow(row);
+                    }
+                    function productPropertyGroup_onRowDataBound(e) {
+                        var grid = $(this).data('tGrid');
+                        //expandFirstRow(grid, e.row);
+                        expandRow(grid, e.row);
+                    }
+                    function onProductProperty(e) {
+                        if (e.mode == "insert") {
+                            //OpenWindow('@(Url.Action("ProductPropertyAddPopup", "Category", new { groupId = Model.Id, btnId = "btnAddNewProductProperty", formId = "productproperty-form" }))    ', 800, 700, true); 
+                            //return false;
+                            // $(e.form).find("td:first").html("hieund");
+                        }
+                    }
+                    function Grid_onError(e) {
+                        alert(e.XMLHttpRequest.responseText);
+                        e.preventDefault();
+                    }
+                    function onProductPropertyEdit(e) {
+                        $(e.form).find('#PropertyType').data('tDropDownList').select(function (dataItem) {
+                            return dataItem.Value == e.dataItem['PropertyType'];
+                        });
+                    }
+                    function returnPropertyType(type)
+                    {
+                        if(parseInt(type)==0)
+                            return '@T("Admin.Catelog.Categories.ProductProperty.Type.SelectOne").Text' ;
+                        else if(parseInt(type)==1)
+                            return  '@T("Admin.Catelog.Categories.ProductProperty.Type.SelectMultiple").Text' ;
+                        else
+                            return '@T("Admin.Catelog.Categories.ProductProperty.Type.EnterText").Text' ;
+                }
+                function productProperty_onRowDataBound(e) {
+                    var grid = $(this).data('tGrid');
+                    //expandFirstRow(grid, e.row);
+                    expandFirstRow(grid, e.row);
+                }
+                </script>
+            </td>
+        </tr>
+    </table>
+    }
+    else
+    {
+    @T("Admin.Catalog.Categories.ProductPropertyGroup.SaveBeforeEdit")
+    }
+    @(Html.Telerik().Window()
+    .Name("ValueMapping")
+    .Visible(false)
+    .Title(T("Admin.Catalog.Categories.ProductPropertyValue.AddValueMapping").Text)
+    .Modal(true)
+    .Width(800)
+    .Height(400)
+    .Content(@<text>
+    <script type="text/javascript">
+        function onCloseMappingPopup()
+        {
+            var detailWindow = $("#ValueMapping").data("tWindow"); 
+            detailWindow.close();
+        }
+
+        function onCategoryDataBinding(e)
+        {
+            var categoryid = e.value;
+            $.ajax({
+                dataType: "json",
+                url: "/Admin/Category/GetProductPropertyByCategoryId",
+                data: {CategoryId :categoryid},
+                success: function(data){
+                    var list = $.each(
+                         data, 
+                         function(item) { 
+                             return {Text: item.Text, Value: item.Value };
+                         });
+                    var dropdown = $('#PropertyList').data('tDropDownList');
+                    var dropdownppvd = $('#PropertyValueListDestination').data('tDropDownList');
+                    dropdown.value('');
+                    dropdown.text('');
+                    dropdownppvd.value('');
+                    dropdownppvd.text('');
+                    dropdown.dataBind(list.data,true);
+                    dropdown.reload();
+                    dropdown.select(0);
+                }
+            });
+        }
+        
+        function onCategoryOnLoad(e)
+        {
+            var categoryid = e.value;
+            $.ajax({
+                dataType: "json",
+                url: "/Admin/Category/GetProductPropertyByCategoryId",
+                data: {CategoryId :categoryid},
+                success: function(data){
+                    var list = $.each(
+                         data, 
+                         function(item) { 
+                             return {Text: item.Text, Value: item.Value };
+                         });
+                    var dropdown = $('#PropertyList').data('tDropDownList');
+                    var dropdownppvd = $('#PropertyValueListDestination').data('tDropDownList');
+                    dropdown.value('');
+                    dropdown.text('');
+                    dropdownppvd.value('');
+                    dropdownppvd.text('');
+                    dropdown.dataBind(list.data,true);
+                    dropdown.reload();
+                    dropdown.select(0);
+                }
+            });
+        }
+
+        function onCategoryChange(e)
+        {
+            var categoryid = e.value;
+            $.ajax({
+                dataType: "json",
+                url: "/Admin/Category/GetProductPropertyByCategoryId",
+                data: {CategoryId :categoryid},
+                success: function(data){
+                    var list = $.each(
+                         data, 
+                         function(item) { 
+                             return {Text: item.Text, Value: item.Value };
+                         });
+                    
+                    var dropdown = $('#PropertyList').data('tDropDownList');
+                    var dropdownppvd = $('#PropertyValueListDestination').data('tDropDownList');
+                    dropdown.value('');
+                    dropdown.text('');
+                    dropdownppvd.value('');
+                    dropdownppvd.text('');
+                    dropdown.dataBind(list.data,true);
+                    dropdown.reload();
+                    dropdown.select(0);
+                }
+            });
+        }
+
+        function onPropertyListChange(e) {
+            var propertyid = e.value;
+            $.ajax({
+                dataType: "json",
+                url: "/Admin/Category/GetProductPropertyValueByPropertyId",
+                data: {propertyId :propertyid},
+                success: function(data){
+                    var list = $.each(
+                         data, 
+                         function(item) { 
+                             return {Text: item.Text, Value: item.Value };
+                         });
+                    var dropdown = $('#PropertyValueListDestination').data('tDropDownList');
+                    dropdown.value('');
+                    dropdown.text('');
+                    dropdown.dataBind(list.data,true);
+                    dropdown.reload();
+                    dropdown.select(0);
+                }
+            });
+           
+        }
+
+        function onChangePropertyValueListSource(e)
+        {
+            var hidden =$("#SourceId");
+            $("#SourceId").val(e.value) ;
+            onLoadGridMapping(e.value);
+        }
+
+        function onChangePropertyValueListDestination(e)
+        {
+            var hidden =$("#DestinationId");
+            $("#DestinationId").val(e.value);
+          
+        }
+        function onChangePropertyMappingValueType(e)
+        {
+            var hidden = $("#MappingType");
+            $("#MappingType").val(e.value);
+        }
+
+        function onLoadGridMapping(e)
+        {
+            $.ajax({
+                dataType: "json",
+                url: "/Admin/Category/DataTemp",
+                data: {productpropertyvalueId : e},
+                success: function(data){
+                    var grid = $('#gridppvm').data('tGrid');
+                    grid.dataBind(data);
+                }
+            });
+        }
+    </script>
+    </text>)
+)
+    <script type="text/javascript">
+        function onComplete(e) {
+            if (e.name == "ValueMapping"){
+                var productproperty = e.response.productpropertyvalue;
+                var detailWindow = $("#ValueMapping").data("tWindow"); 
+                $("#detail-mapping").find("h1").text(productproperty.Name);
+                $("#detail-mapping").find("h2").text(productproperty.Id);
+                //$("#detail-mapping").find("div#ppv-list").html(html);
+
+                detailWindow.ajaxRequest("/Admin/Category/LoadProductPropertyValueByPropertyId", { productpropertyId : productproperty.Id });
+                //detailWindow.ajaxRequest("/Admin/Category/LoadProductPropertyValueByPropertyId",{ Id : productpropertyvalue.Id } );
+                detailWindow.center().open();
+            }
+        }
+    </script>
+}
+@helper TabCompareTemplate()
+{
+    if (Model.Id > 0)
+    {
+        @Html.TextAreaFor(model => model.HtmlCompare, 20, 100, null)
+    }
+    else
+    {
+        @T("Admin.Catalog.Categories.ProductPropertyGroup.SaveBeforeEdit")
+    }
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#@Html.FieldIdFor(model => model.AllowCustomersToSelectPageSize)").click(togglePageSize);
+        togglePageSize();
+    });
+
+    function togglePageSize() {
+        if ($('#@Html.FieldIdFor(model => model.AllowCustomersToSelectPageSize)').is(':checked')) {
+            $('#pnlPageSize').hide();
+            $('#pnlPageSizeOptions').show();
+        } else {
+            $('#pnlPageSize').show();
+            $('#pnlPageSizeOptions').hide();
+        }
+    }
+</script>
+<style type="text/css">
+    
+    .field-validation-error
+    {
+        position: absolute;
+        display: block;
+    }
+    
+    * html .field-validation-error { position: relative; }
+    *+html .field-validation-error { position: relative; }
+    
+    .field-validation-error span
+    {
+        position: absolute;
+        white-space: nowrap;
+        color: red;
+        padding: 17px 5px 3px;
+        background: transparent url('@Url.Content("~/Content/Images/validation-error-message.png") ') no-repeat 0 0;
+    }
+    
+    /* in-form editing */
+    .t-edit-form-container
+    {
+        width: 350px;
+        margin: 1em;
+    }
+    
+    .t-edit-form-container .editor-label,
+    .t-edit-form-container .editor-field
+    {
+        padding-bottom: 1em;
+        float: left;
+    }
+    
+    .t-edit-form-container .editor-label
+    {
+        width: 30%;
+        text-align: right;
+        padding-right: 3%;
+        clear: left;
+    }
+    
+    .t-edit-form-container .editor-field
+    {
+        width: 60%;
+    }
+</style>

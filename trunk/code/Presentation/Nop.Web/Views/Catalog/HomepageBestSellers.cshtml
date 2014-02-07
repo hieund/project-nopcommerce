@@ -1,0 +1,40 @@
+﻿@model IList<ProductOverviewModel>
+@using Nop.Web.Models.Catalog;
+
+@if (Model.Count > 0)
+{
+    Html.AddScriptParts("~/Scripts/jcarousellite_1.0.1.js");
+    <h2>@T("HomePage.Products")</h2>
+    <div class="producthot">
+        <div id="carousel1" class="carousel" style="left: 36px">
+            <ul style="margin-left: 0px;list-style:none;">
+            @foreach (var item in Model)
+            {   <li style="min-height:200px">
+                    <div class="producthot_col">
+                        @Html.Partial("_ProductBox", item)
+                    </div>
+                </li>
+            }
+            </ul>
+        </div>
+        <div class="next">
+            <a href="#">
+                <img src="/Themes/DefaultClean/Content/images/next.png" />
+            </a>
+        </div>
+        <div class="pre">
+            <a href="#">
+                <img src="/Themes/DefaultClean/Content/images/pre.png" />
+            </a>
+        </div>
+    </div>
+    <script>
+        jQuery("#carousel1").jCarouselLite({
+            btnNext: ".next",
+            btnPrev: ".pre",
+            visible: 6,
+            //auto: 800,
+            speed: 1000
+        });
+    </script>
+}

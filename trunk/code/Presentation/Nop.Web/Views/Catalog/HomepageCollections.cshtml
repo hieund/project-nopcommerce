@@ -1,0 +1,86 @@
+﻿@model IList<ProductOverviewModel>
+
+@using Nop.Web.Models.Catalog;
+
+@if (Model.Count > 0)
+{
+    <h2>Bộ Sưu tập HOT</h2>
+    <div class="collectionhot">
+        <div class="collectionhot_left">
+            @if(Model.Count > 1){
+            <div class="next1">
+                <a href="#">
+                    <img src="/Themes/DefaultClean/Content/images/next1.png" />
+                </a>
+            </div>
+            <div class="pre1">
+                <a href="#">
+                    <img src="/Themes/DefaultClean/Content/images/pre1.png" />
+                </a>
+            </div>
+            }
+            <div id="carousel2" class="carousel" style="left:18px">
+                <ul style="margin-left: 0px; list-style: none;">
+                @foreach (var item in Model)
+                {   
+                    <li id="@item.Id">
+                        <div class="collectionhot_left_img">
+                            <a href="@Url.RouteUrl("Product", new { SeName = item.SeName })">
+                                <img src="@item.DefaultPictureModel.ImageUrl" alt="@item.DefaultPictureModel.AlternateText" title="@item.DefaultPictureModel.Title"/>
+                            </a>
+                            <p align="center" class="price1">@(item.ProductPrice.Price)</p>
+                        </div>
+                        <div class="collectionhot_left_ct">
+                            <p><a href="@Url.RouteUrl("Product", new { SeName = item.SeName })">@item.Name</a></p>
+                            <p>@Html.Raw(item.ShortDescription)</p>
+                            <p>
+                            @Html.Action("ProductReviewOverview", new { productId = item.Id })
+                            </p>
+                            @*<p>
+                                <button type="button" class="btmua" onclick="QuickOrder(@item.ProductPrice.Id);">Mua ngay</button>
+                            </p>*@
+                        </div>
+                    </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <!--end-->
+        <div id="divCollection" class="collectionhot_right">
+            @Html.Action("ProductCollections", new { productId = Model[0].Id, productThumbPictureSize = 80 })
+        </div>
+        <input type="hidden" id="hfProductID" value="@Model[0].Id" />
+    </div>
+    <!--end-->
+    if(Model.Count > 1){
+    <script>
+        jQuery("#carousel2").jCarouselLite({
+            btnNext: ".next1",
+            btnPrev: ".pre1",
+            visible: 1,
+            //auto: 800,
+            speed: 1000,
+            afterEnd: function (a) {
+                $("#hfProductID").val($(a[0]).attr("id"));
+                LoadCollection();
+            }
+        });
+        $(function () {
+            $('.stars').stars();
+        });
+        $.fn.stars = function () {
+            return $(this).each(function () {
+                // Get the value
+                var val = parseFloat($(this).html());
+                val = Math.round(val * 2) / 2;
+                // Make sure that the value is in 0 - 5 range, multiply to get width
+                var size = Math.max(0, (Math.min(5, val))) * 21;
+                // Create stars holder
+                var $span = $('<span />').width(size);
+                // Replace the numerical value with stars
+                $(this).html($span);
+            });
+        }
+    </script>
+    }
+}

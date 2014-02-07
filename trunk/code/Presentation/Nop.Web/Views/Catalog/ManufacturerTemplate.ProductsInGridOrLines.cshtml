@@ -1,0 +1,105 @@
+﻿@model ManufacturerModel
+@{
+    Layout = "~/Views/Shared/_Root.cshtml";
+    Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        var manufacturerUrl = Url.RouteUrl("Manufacturer", new { SeName = Model.SeName }, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(manufacturerUrl);
+    }
+}
+@using Nop.Core.Domain.Common;
+@using Nop.Core.Domain.Seo;
+@using Nop.Core.Infrastructure;
+@using Nop.Web.Models.Catalog;
+@using Nop.Web.Extensions;
+<div class="page manufacturer-page">
+    <div class="page-title">
+        @*<h1>@Model.Name</h1>*@
+    </div>
+    <div class="page-body">
+        @Html.Widget("manufacturerdetails_top")
+        @*description*@
+        @if (!String.IsNullOrWhiteSpace(Model.Description))
+        {
+            <div class="manufacturer-description">
+                @Html.Raw(Model.Description)
+            </div>
+        }
+@*sitemap*@
+        <div class="nav">
+            <ul>
+                <li>
+                    <span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                        <a href="@Url.RouteUrl("HomePage")" title="@T("common.home")" itemprop="url">
+                            <span itemprop="title">@T("common.home")</span>
+                        </a>
+                    </span>
+                    <span class="delimiter">›</span>
+                </li>
+                <li>
+                    <span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                        <a>@Model.Name</a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        @Html.Partial("_ManufactureFilter")
+        @Html.Widget("manufacturerdetails_before_featured_products")
+        @*featured products*@
+        @if (Model.FeaturedProducts.Count > 0)
+        {
+            <div class="product-grid featured-product-grid">
+                <div class="title">
+                    <strong>@T("Products.FeaturedProducts")</strong>
+                </div>
+                <div class="product">
+                    @foreach (var product in Model.FeaturedProducts)
+                    {
+                        <div class="prosub">
+                            @Html.Partial("_ProductBox", product)
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        @Html.Widget("manufacturerdetails_before_product_list")
+        @*product list*@
+        @if (Model.Products.Count > 0)
+        {
+            if (Model.PagingFilteringContext.ViewMode == "list")
+            {
+@*list mode*@
+            <div class="product">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="prosub">
+                        @Html.Partial("_ProductBox", product)
+                    </div>
+                }
+            </div>
+            }
+            else
+            {
+@*grid mode*@
+            <div class="product">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="prosub">
+                        @Html.Partial("_ProductBox", product)
+                    </div>
+                }
+            </div>
+            }
+        }
+        <div class="pager">
+            @Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber")
+        </div>
+        @Html.Widget("manufacturerdetails_bottom")
+    </div>
+</div>

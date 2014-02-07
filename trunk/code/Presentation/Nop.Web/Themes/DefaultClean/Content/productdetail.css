@@ -1,0 +1,98 @@
+﻿#carousel, #thumbs {
+	overflow: hidden;
+}
+#thumbs {
+    
+}
+#carousel-wrapper .caroufredsel_wrapper {
+}
+
+#thumbs a, #thumbs img  {
+	display: block;
+	float: left;
+}
+#carousel img{
+    max-height:250px;	
+    max-width:303px;	
+}
+#carousel span{
+    text-align:center;
+    float:left;
+}
+#thumbs .img{
+    float:left;
+	width: 36px!important;
+    margin-right:8px;
+    height: 36px;
+    position:relative;
+    border: 1px solid #ccc;
+    _overflow: hidden;
+    word-wrap: break-word;
+}
+#thumbs img  {
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    max-height: 100%;
+    max-width: 100%;
+    height: auto;
+    -ms-interpolation-mode: bicubic;
+}
+#carousel span, #carousel a,
+#thumbs span, #thumbs a {
+	position: relative;
+}
+#carousel img,
+#thumbs img {
+}
+#carousel img.glare,
+#thumbs img.glare {
+	width: 100%;
+	height: auto;
+}
+
+#carousel span {
+	width: 303px;
+	height: 250px;
+}
+
+#thumbs-wrapper {
+	position: relative;
+}
+#thumbs a {
+	width: 36px;
+	height: 36px;
+	overflow: hidden;
+}
+#thumbs a:hover, #thumbs a.selected {
+	border-color: #566;
+}
+			
+#wrapper img#shadow {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+}
+.boxcolor span{
+    float:left;
+    margin-right:5px;
+}
+.boxcolor div.color {
+    width: 15px;
+    height: 15px;
+    border: 1px solid #ccc;
+    float:left;
+    margin-right:5px;
+}
+.boxcolor div.active{
+    border: 3px solid #ccc;
+    width:15px;
+    height:15px;
+    margin-top:-3px;
+}
+#gallery-horizotal-thumbnail {
+width: 343px;
+}

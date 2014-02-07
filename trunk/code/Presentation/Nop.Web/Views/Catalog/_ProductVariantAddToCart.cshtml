@@ -1,0 +1,60 @@
+﻿@model ProductDetailsModel.ProductVariantModel.AddToCartModel
+@using Nop.Web.Models.Catalog;
+@using Nop.Core.Domain.Orders;
+<p class="add-to-cart">
+    @*@if (Model.CustomerEntersPrice)
+    {
+        <div class="customer-entered-price">
+            <div class="price-input">
+                @Html.LabelFor(model => model.CustomerEnteredPrice, new { @class = "enter-price-label" }, ":")
+                @*round price*@
+                @*@Html.TextBox("CustomerEnteredPrice", Convert.ToInt32(Math.Ceiling(Model.CustomerEnteredPrice)), new { @class = "enter-price-input" })
+            </div>
+            <div class="price-range">
+                @Model.CustomerEnteredPriceRange
+            </div>
+        </div>
+    }*@
+    @if (!Model.DisableBuyButton || !Model.DisableWishlistButton)
+    {
+        @*<p align="center">
+            Số lượng
+            <select name="">
+                <option>1</option>
+                <option>2</option>
+            </select>
+        </p>
+        <p align="center">
+            <button type="button" class="btaddcart">Thêm vào giỏ hàng</button>
+        </p>
+        <p align="center">Hoặc</p>
+        <p align="center">
+            <button type="button" class="btmua">Mua ngay</button>
+        </p>*@
+        <p align="center">
+            @Html.LabelFor(model => model.EnteredQuantity, new { @class = "qty-label" }, ":")
+            @if (Model.AllowedQuantities.Count > 0)
+            {
+                @Html.DropDownListFor(model => model.EnteredQuantity, Model.AllowedQuantities, new { @class = "qty-dropdown" })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => model.EnteredQuantity, new { @class = "qty-input" })
+            }
+        </p>
+        <p align="center">
+            @if (!Model.DisableBuyButton)
+            {
+                <input type="button" class="btaddcart" value="Thêm vào giỏ hàng" data-productvariantid="@Model.ProductVariantId" onclick="AjaxCart.addproductvarianttocart('@Url.RouteUrl("AddProductVariantToCart", new { productVariantId = Model.ProductVariantId, shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart })', '#product-details-form');return false;" />
+            }
+            @*@if (!Model.DisableWishlistButton)
+            {
+                <input type="button" class="button-2 add-to-wishlist-button" value="@T("ShoppingCart.AddToWishlist")" data-productvariantid="@Model.ProductVariantId" onclick="AjaxCart.addproductvarianttocart('@Url.RouteUrl("AddProductVariantToCart", new { productVariantId = Model.ProductVariantId, shoppingCartTypeId = (int)ShoppingCartType.Wishlist })', '#product-details-form');return false;" />
+            }*@
+        </p>
+        <p align="center">
+            <button type="button" class="btmua" onclick="QuickOrder(@Model.ProductVariantId);">Mua ngay</button>
+        </p>
+    }
+    @Html.Widget("productdetails_add_info")
+</P>

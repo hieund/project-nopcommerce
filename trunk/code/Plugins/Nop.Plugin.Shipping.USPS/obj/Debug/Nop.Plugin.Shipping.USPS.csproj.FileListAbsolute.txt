@@ -1,0 +1,6 @@
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Shipping.USPS\Description.txt
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Shipping.USPS\logo.jpg
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Shipping.USPS\Nop.Plugin.Shipping.USPS.dll
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Shipping.USPS\Nop.Plugin.Shipping.USPS.pdb
+E:\sancovn.com\code\Plugins\Nop.Plugin.Shipping.USPS\obj\Debug\Nop.Plugin.Shipping.USPS.dll
+E:\sancovn.com\code\Plugins\Nop.Plugin.Shipping.USPS\obj\Debug\Nop.Plugin.Shipping.USPS.pdb

@@ -1,0 +1,6 @@
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.CheckMoneyOrder\Description.txt
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.CheckMoneyOrder\logo.jpg
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.CheckMoneyOrder\Nop.Plugin.Payments.CheckMoneyOrder.dll
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.CheckMoneyOrder\Nop.Plugin.Payments.CheckMoneyOrder.pdb
+E:\sancovn.com\code\Plugins\Nop.Plugin.Payments.CheckMoneyOrder\obj\Debug\Nop.Plugin.Payments.CheckMoneyOrder.dll
+E:\sancovn.com\code\Plugins\Nop.Plugin.Payments.CheckMoneyOrder\obj\Debug\Nop.Plugin.Payments.CheckMoneyOrder.pdb

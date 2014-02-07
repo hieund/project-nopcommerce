@@ -1,0 +1,57 @@
+﻿@model SearchBoxModel
+@using Nop.Web.Models.Catalog;
+@using (Html.BeginRouteForm("ProductSearch", FormMethod.Get, new { onsubmit = "return check_small_search_form()" }))
+{
+    <p class="bg_select">
+        <input type="text" class="tf_select" id="compare-search" @(Model.AutoCompleteEnabled ? Html.Raw(" autocomplete=\"off\"") : null) name="q"/>
+        <input type="submit" value="" class="bt_select" />
+    </p>
+    <script type="text/javascript">
+        function check_small_search_form() {
+            var search_terms = $("#compare-search");
+            if (search_terms.val() == "") {
+                alert('@Html.Raw(HttpUtility.JavaScriptStringEncode(T("Search.EnterSearchTerms").Text))');
+                search_terms.focus();
+                return false;
+            }
+            return true;
+        }
+            @if (Model.AutoCompleteEnabled)
+            {
+                <text>
+        $(function () {
+            $('#compare-search').autocomplete({
+                delay: 500,
+                minLength: @(Model.SearchTermMinimumLength.ToString()),
+                source: '@(Url.RouteUrl("ProductSearchAutoComplete"))',
+                select: function( event, ui ) {
+                    $("#compare-search").val(ui.item.label);
+                    $.post('/Catalog/CheckProductToCompare?productId=' + ui.item.pid, {}, function(data) {
+                        if (data == 0)
+                        {
+                            if(confirm("Sản phẩm so sánh không cùng ngành hàng. Bạn có muốn xóa danh sách sản phẩm so sánh?"))
+                                setLocation('/so-sanh/them/' + ui.item.pid);
+                        }
+                        else
+                            setLocation('/so-sanh/them/' + ui.item.pid);
+                    });
+                    //setLocation('/compareproducts/add/' + ui.item.pid)
+                    //setLocation(ui.item.producturl);
+                    return false;
+                }
+            })
+                    .data("ui-autocomplete")._renderItem = function( ul, item ) {
+                        var t = item.label;
+                        //html encode
+                        t = htmlEncode(t);
+                        return $("<li></li>")
+                        .data("item.autocomplete", item)
+                        .append("<a><p>"+ t + "</p></a>")
+                    .appendTo(ul);
+                    };
+        });
+        </text>
+            }
+    </script>
+    @Html.Widget("searchbox")
+}

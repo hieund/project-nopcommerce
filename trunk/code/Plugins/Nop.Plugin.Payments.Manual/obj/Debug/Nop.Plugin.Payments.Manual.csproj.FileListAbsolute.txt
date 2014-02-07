@@ -1,0 +1,7 @@
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.Manual\Description.txt
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.Manual\logo.jpg
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.Manual\Nop.Plugin.Payments.Manual.dll
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.Manual\Nop.Plugin.Payments.Manual.pdb
+E:\sancovn.com\code\Plugins\Nop.Plugin.Payments.Manual\obj\Debug\Nop.Plugin.Payments.Manual.csprojResolveAssemblyReference.cache
+E:\sancovn.com\code\Plugins\Nop.Plugin.Payments.Manual\obj\Debug\Nop.Plugin.Payments.Manual.dll
+E:\sancovn.com\code\Plugins\Nop.Plugin.Payments.Manual\obj\Debug\Nop.Plugin.Payments.Manual.pdb

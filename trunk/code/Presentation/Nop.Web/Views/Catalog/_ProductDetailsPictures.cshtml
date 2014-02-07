@@ -1,0 +1,125 @@
+﻿@model ProductDetailsModel
+@using Nop.Web.Models.Catalog;
+@{
+    Html.AddScriptParts("~/Scripts/slimbox2.js");
+
+    int productPerRow = 4;
+}
+@*<div class="gallery">
+    <div class="picture">
+        @if (Model.DefaultPictureZoomEnabled)
+        {
+            <a href="@Model.DefaultPictureModel.FullSizeImageUrl" data-gallery="lightbox-pd" title="@Model.Name">
+                <img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" itemprop="image" />
+            </a>
+        }
+        else
+        {
+            <img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" itemprop="image" />
+        }
+    </div>
+    @if (Model.PictureModels.Count > 1)
+    {
+        <div class="picture-thumbs">
+            @for (int i = 0; i < Model.PictureModels.Count; i++)
+            {
+                var picture = Model.PictureModels[i];
+
+                if (i % productPerRow == 0)
+                {
+                @Html.Raw("<div>")
+                }
+                <a href="@picture.FullSizeImageUrl" data-gallery="lightbox-p" title="@Model.Name">
+                    <img src="@picture.ImageUrl" alt="@picture.AlternateText" title="@picture.Title" />
+                </a>                 
+                if ((i % productPerRow == (productPerRow - 1)) ||
+                    //last image
+                    (i == (Model.PictureModels.Count - 1)))
+                {
+                @Html.Raw("</div>")
+                }
+            }
+        </div>
+    }
+</div>*@
+<div class="detail_col1">
+    @if(Model.ProductVariantModels!= null && Model.ProductVariantModels.First()!= null)
+    {
+        var price = Model.ProductVariantModels.First().ProductVariantPrice;
+        if(price.Discount>0)
+        {
+            <div class="countdown">-@price.Discount.ToString()%</div>
+        }
+    }
+    <div id="gallery-horizotal-thumbnail" class="royalSlider rsDefault fwImage col span_4">
+        @for (int i = 0; i < Model.PictureModels.Count; i++)
+        {
+            var picture = Model.PictureModels[i];
+            if(i==0)
+            {
+                <a class="rsImg" data-rsdelay="2000" data-rsbigimg="@picture.FullSizeImageUrl" href="@picture.FullSizeImageUrl"><img class="rsTmb" src="@picture.ImageUrl" alt="@Model.DefaultPictureModel.AlternateText" height="" width="" id="rsTmb_@picture.ProductVariantId" itemid="@i" /></a>
+            }
+            else
+            {
+                <a class="rsImg" data-rsbigimg="@picture.FullSizeImageUrl" href="@picture.FullSizeImageUrl"><img class="rsTmb" src="@picture.ImageUrl" alt="@Model.DefaultPictureModel.AlternateText" height="" width="" id="rsTmb_@picture.ProductVariantId" itemid="@i" /></a>
+            }
+        }
+    </div>
+    <!--
+    <div class="prodetail" align="center">
+        @if(Model.ProductVariantModels!= null && Model.ProductVariantModels.First()!= null)
+        {
+            var price = Model.ProductVariantModels.First().ProductVariantPrice;
+            if(price.Discount>0)
+            {
+                <div class="countdown">-@price.Discount.ToString()%</div>
+            }
+        }
+        @*<img src="/Themes/DefaultClean/Content/images/productdetail.jpg"  />*@
+        
+        <div id="carousel">
+            <span><img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" itemprop="image" /></span>
+            @for (int i = 0; i < Model.PictureModels.Count; i++)
+            {
+                var picture = Model.PictureModels[i];
+                <span id="large_@i" class="large_@picture.ProductVariantId"><img src="@picture.FullSizeImageUrl" alt="@picture.AlternateText" title="@picture.Title" /></span>
+            }
+		</div>
+    </div>
+    @if (Model.PictureModels.Count > 1)
+    {
+        <div class="boxprodetail">
+            <div class="boxdetail">
+                <div class="pre2"><a id="prev" href="#">
+                    <img src="/Themes/DefaultClean/Content/images/pre2.png" />
+                </a></div>
+                <div class="next2"><a id="next" href="#">
+                    <img src="/Themes/DefaultClean/Content/images/next2.png" />
+                </a></div>
+                <div id="thumbs">
+                    @for (int i = 0; i < Model.PictureModels.Count; i++)
+                    {
+                        var picture = Model.PictureModels[i];
+                        <div class="img"><a href="#large_@i" class="selected thumb_@picture.ProductVariantId"><img src="@picture.ImageUrl"  alt="@picture.AlternateText" title="@picture.Title" /></a></div>
+                    }
+                </div>
+            </div>
+            <div class="boxcolor">
+                <span>Màu sắc  </span>
+                @foreach (var variant in Model.ProductVariantModels)
+                {
+                    var dataDictColor = new ViewDataDictionary();
+                    dataDictColor.TemplateInfo.HtmlFieldPrefix = string.Format("color_{0}", variant.Id);
+                    @Html.Partial("_ProductVariantColor", variant.ProductVariantColor, dataDictColor)
+                }
+                @*<a href="#">
+                    <img src="/Themes/DefaultClean/Content/images/gray.jpg" align="absmiddle" />
+                </a>
+                <a href="#">
+                    <img src="/Themes/DefaultClean/Content/images/red.jpg" align="absmiddle" />
+                </a>*@
+            </div>
+        </div>
+    }
+    -->
+</div>

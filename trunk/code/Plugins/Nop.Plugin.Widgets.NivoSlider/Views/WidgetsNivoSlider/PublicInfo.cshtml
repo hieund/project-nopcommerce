@@ -1,0 +1,110 @@
+﻿@model Nop.Plugin.Widgets.NivoSlider.Models.PublicInfoModel
+@*@{
+    Layout = "";
+
+    Html.AddScriptParts("~/Plugins/Widgets.NivoSlider/Scripts/jquery.nivo.slider.js");
+    Html.AddCssFileParts("~/Plugins/Widgets.NivoSlider/Content/nivoslider/nivo-slider.css");
+    Html.AddCssFileParts("~/Plugins/Widgets.NivoSlider/Content/nivoslider/themes/default/default.css");
+}
+@using System
+@using Nop.Web.Framework.UI
+
+@helper RenderSliderLine(string pictureUrl, string text, string link, string dataTransition = "")
+{
+    if (!string.IsNullOrEmpty(pictureUrl))
+    {
+        if (!string.IsNullOrEmpty(link))
+        {
+            <a href="@link">
+                <img src="@pictureUrl" data-thumb="@pictureUrl" data-transition="@dataTransition" alt="" title="@text" />
+            </a>
+        }
+        else
+        {
+            <img src="@pictureUrl" data-thumb="@pictureUrl" data-transition="@dataTransition" alt="" title="@text" />
+        }
+    }
+}
+<div class="slider-wrapper theme-default">
+    <div id="nivo-slider" class="nivoSlider lof-slidecontent">
+        @RenderSliderLine(Model.Picture1Url, Model.Text1, Model.Link1)
+        @RenderSliderLine(Model.Picture2Url, Model.Text2, Model.Link2)
+        @RenderSliderLine(Model.Picture3Url, Model.Text3, Model.Link3, "slideInLeft")
+        @RenderSliderLine(Model.Picture4Url, Model.Text4, Model.Link4)
+    </div>
+</div>
+<script type="text/javascript">
+    $(window).load(function () {
+        $('#nivo-slider').nivoSlider();
+    });
+</script>*@
+
+@{
+    Layout = "";
+                //Html.AddScriptParts("~/Plugins/Widgets.NivoSlider/Scripts/mootools.svn.js");
+                //Html.AddScriptParts("~/Plugins/Widgets.NivoSlider/Scripts/lofslidernews.mt11.js");
+}
+@using System
+@using Nop.Web.Framework.UI
+@helper RenderSliderImage(int i, string pictureUrl, string link)
+{
+    if (!string.IsNullOrEmpty(link))
+    {
+    <div id="fragment-@i" class="lof-main-item ui-tabs-panel">
+        @*@if (!string.IsNullOrEmpty(link))
+        {
+            <a href="@link">
+                <img src="@pictureUrl" width="716" />
+            </a>
+        }
+        else
+        {
+            <img src="@pictureUrl" width="716" />
+        }*@
+        @Html.Raw(link)
+    </div>
+    }
+}
+@helper RenderSliderCaption(int i, string title, string content)
+{
+    <li class="ui-tabs-nav-item">
+        <a href="#fragment-@i">
+            <div>
+                <h5>@title</h5>
+                <div>@content</div>
+            </div>
+        </a>
+    </li>
+}
+<!------------------------------------- THE CONTENT ------------------------------------------------->
+<div id="slide">
+    <div id="featured" class="lof-slidecontent">
+        <!-- MAIN CONTENT -->
+        <div class="lof-main-wapper">
+            @RenderSliderImage(1, Model.Picture1Url, Model.Link1)
+            @RenderSliderImage(2, Model.Picture2Url, Model.Link2)
+            @RenderSliderImage(3, Model.Picture3Url, Model.Link3)
+            @RenderSliderImage(4, Model.Picture4Url, Model.Link4)
+        </div>
+        <!-- END MAIN CONTENT -->
+        <!-- NAVIGATOR -->
+        <div class="lof-navigator-outer">
+            <ul class="lof-navigator ui-tabs-nav">
+                @RenderSliderCaption(1, Model.Text1, Model.Content1)
+                @RenderSliderCaption(2, Model.Text2, Model.Content2)
+                @RenderSliderCaption(3, Model.Text3, Model.Content3)
+                @RenderSliderCaption(4, Model.Text4, Model.Content4)
+            </ul>
+        </div>
+    </div>
+</div>
+<div style="text-align: center; position: relative; top: -6px;">
+    <img src="/Themes/DefaultClean/Content/images/line.png" style="width: 869px; height: 8px" />
+</div>
+<script src="/Plugins/Widgets.NivoSlider/Scripts/jquery-ui-tabs-rotate.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#featured").tabs({ fx: { opacity: "toggle" } }).tabs("rotate", 3000, true);
+    });
+</script>
+<!------------------------------------- END OF THE CONTENT ------------------------------------------------->

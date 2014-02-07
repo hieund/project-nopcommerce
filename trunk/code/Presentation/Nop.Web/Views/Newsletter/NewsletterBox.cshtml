@@ -1,0 +1,45 @@
+﻿@model NewsletterBoxModel
+@using Nop.Web.Models.Newsletter;
+<div class="nhantin">
+    @T("Newsletter.Subscribe")
+    <div class="bgnhantin">
+        @Html.TextBoxFor(x => x.NewsletterEmail, new { id = "newsletter-email", placeholder="Email của bạn", @class="tf_nhantin" })
+        @Html.ValidationMessageFor(x => x.NewsletterEmail)
+        <input type="button" value="@T("Newsletter.Button")" id="newsletter-subscribe-button" class="bt_nhantin" />
+        <span id="subscribe-loading-progress" style="display: none;" class="please-wait">@T("Common.Wait...")</span>
+    </div>
+    <div id="newsletter-result-block" class="newsletter-result-block">
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#newsletter-subscribe-button').click(function () {
+
+            var email = $("#newsletter-email").val();
+            var subscribeProgress = $("#subscribe-loading-progress");
+            subscribeProgress.show();
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.RouteUrl("SubscribeNewsletter"))",
+                    data: { "email": email },
+                    success: function (data) {
+                        subscribeProgress.hide();
+                        $("#newsletter-result-block").html(data.Result);
+                        if (data.Success) {
+                            $('#newsletter-subscribe-block').hide();
+                            $('#newsletter-result-block').show();
+                        }
+                        else {
+                            $('#newsletter-result-block').fadeIn("slow").delay(2000).fadeOut("slow");
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert('Failed to subscribe.');
+                        subscribeProgress.hide();
+                    }
+                });
+                return false;
+            });
+        });
+</script>

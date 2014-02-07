@@ -1,0 +1,27 @@
+﻿@using Telerik.Web.Mvc.UI;
+@using Nop.Core.Domain.Catalog;
+@using Nop.Services.Catalog;
+
+@{    
+    var productpropertytypeList = new List<SelectListItem>();
+    var item0 = new SelectListItem()
+    {
+        Text = T("Admin.Catelog.Categories.ProductProperty.Type.SelectOne").Text,
+        Value = "0"
+    };
+    var item1 = new SelectListItem()
+    {
+        Text = T("Admin.Catelog.Categories.ProductProperty.Type.SelectMultiple").Text,
+        Value = "1"
+    };
+    var item2 = new SelectListItem()
+    {
+        Text = T("Admin.Catelog.Categories.ProductProperty.Type.EnterText").Text,
+        Value = "2"
+    };
+    productpropertytypeList.Add(item0);
+    productpropertytypeList.Add(item1);
+    productpropertytypeList.Add(item2);
+}
+
+@Html.Telerik().DropDownList().Name("PropertyType").BindTo(productpropertytypeList)

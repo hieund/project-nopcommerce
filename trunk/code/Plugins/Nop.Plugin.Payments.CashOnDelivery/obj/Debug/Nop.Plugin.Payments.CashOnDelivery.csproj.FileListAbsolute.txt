@@ -1,0 +1,7 @@
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.CashOnDelivery\Description.txt
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.CashOnDelivery\logo.jpg
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.CashOnDelivery\logo2.jpg
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.CashOnDelivery\Nop.Plugin.Payments.CashOnDelivery.dll
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.CashOnDelivery\Nop.Plugin.Payments.CashOnDelivery.pdb
+E:\sancovn.com\code\Plugins\Nop.Plugin.Payments.CashOnDelivery\obj\Debug\Nop.Plugin.Payments.CashOnDelivery.dll
+E:\sancovn.com\code\Plugins\Nop.Plugin.Payments.CashOnDelivery\obj\Debug\Nop.Plugin.Payments.CashOnDelivery.pdb

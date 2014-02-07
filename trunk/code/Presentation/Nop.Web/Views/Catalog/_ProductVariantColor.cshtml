@@ -1,0 +1,3 @@
+﻿@model ProductDetailsModel.ProductVariantModel.ProductVariantColorModel
+@using Nop.Web.Models.Catalog;
+<a href="javascript:void(0);" onclick="ChangeProductVariantColor('/ChangeProductVariantColor/@Model.ProductVariantId');return false;"><div id="color_@Model.ProductVariantId" class="color" style="background:@Model.ColorCode"></div></a>

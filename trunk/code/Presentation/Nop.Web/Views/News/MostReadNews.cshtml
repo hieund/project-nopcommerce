@@ -1,0 +1,26 @@
+﻿@model NewsItemListModel
+@using Nop.Web.Extensions;
+@using Nop.Web.Models.News;
+@if(Model.NewsItems.Count > 0)
+{
+<div class="contentright">
+    <div class="viewnews">
+        <div class="titleview">Tin đọc nhiều nhất</div>
+        <ul>
+            @foreach (var item in Model.NewsItems)
+            {
+                <li><a href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">
+                    <img src="@item.DefaultPictureModel.ImageUrl" alt="@item.DefaultPictureModel.AlternateText" title="@item.DefaultPictureModel.Title" align="left" />
+                </a>
+                    <h4><a href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">@item.Title</a> </h4>
+                    <p class="date1">@item.CreatedOn.ToString("D")</p>
+                    @*<p>@Html.Raw(item.Short.Substring(0, 40))...</p>*@
+                </li>
+            }
+            <li>
+                <p align="right"><a href="/News" class="linkblue">Xem tất cả</a></p>
+            </li>
+        </ul>
+    </div>
+</div>
+}

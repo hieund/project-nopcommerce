@@ -1,0 +1,263 @@
+﻿@model Nop.Admin.Models.Game.LuckyBoxModel
+@using Telerik.Web.Mvc.UI;
+@Html.ValidationSummary(false)
+@Html.HiddenFor(model => model.Id)
+@Html.Telerik().TabStrip().Name("luckyboxdetail-edit").Items(x =>
+{
+    if (ViewBag.AllowManageGames)
+    {
+        x.Add().Text(T("Admin.Game.LuckyBox.Info").Text).Content(TabInfo().ToHtmlString()).Selected(true);
+        x.Add().Text(T("Admin.Game.LuckyBox.Gifts").Text).Content(TabGifts().ToHtmlString());
+    }
+    if (ViewBag.AllowManageGames)
+        x.Add().Text("Danh sách khách hàng tham gia").Content(TabDraws().ToHtmlString());
+    else
+        x.Add().Text("Danh sách khách hàng tham gia").Content(TabDraws().ToHtmlString()).Selected(true);
+    //generate an event
+    EngineContext.Current.Resolve<IEventPublisher>().Publish(new AdminTabStripCreated(x, "luckyboxdetail-edit"));
+})
+@helper TabDraws()
+{
+    if (Model.Id > 0)
+    {
+    <div>
+        @(Html.Telerik().Grid<Nop.Admin.Models.Game.LuckyBoxDrawModel>()
+            .Name("luckyboxdraws-grid")
+            .DataKeys(x =>
+            {
+                x.Add(y => y.Id).RouteKey("Id");
+            })
+            .Columns(columns =>
+            {
+                columns.Bound(x => x.LuckyBoxCode).Title("Mã trúng thưởng").Width(100);
+                columns.Bound(x => x.GiftName).Title("Tên quà");
+                columns.Bound(x => x.CustomerName).Title("Tên KH");
+                columns.Bound(x => x.CustomerPhone).Title("Số ĐT").Width(70);
+                columns.Bound(x => x.CustomerEmail).Title("Email");
+                columns.Bound(x => x.CustomerAddress).Title("Địa chỉ");
+                columns.Bound(x => x.ReceiptNo).Title("Số Hóa đơn");
+                columns.Bound(x => x.CreatedOnUtd).Title("Thời điểm quay").Width(140);
+                columns.Bound(x => x.IsCompleted).Title("Trạng thái")
+                    .ClientTemplate("<img alt='' src='" + Url.Content("~/Administration/Content/images/") + "active-<#= IsCompleted #>.gif' />")
+                    .Width(100)
+                    .Centered();
+
+            })
+            .DataBinding(dataBinding =>
+            {
+                dataBinding.Ajax().Select("ListDraws", "LuckyBox", new { luckyBoxId = Model.Id });
+            })
+            .Filterable()
+            .Pageable(settings => settings.PageSize(EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSize).Position(GridPagerPosition.Both)))
+    </div>
+    }
+}
+@helper TabInfo()
+{
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Name):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Description):
+            </td>
+            <td class="adminData">
+                @Html.TextAreaFor(model => model.Description, new { style = "Width: 500px; Height: 150px;" })
+                @Html.ValidationMessageFor(model => model.Description)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Rows):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Rows)
+                @Html.ValidationMessageFor(model => model.Rows)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Columns):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Columns)
+                @Html.ValidationMessageFor(model => model.Columns)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.WinCycle):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.WinCycle)
+                @Html.ValidationMessageFor(model => model.WinCycle)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.BeginDate):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.BeginDate)
+                @Html.ValidationMessageFor(model => model.BeginDate)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.EndDate):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.EndDate)
+                @Html.ValidationMessageFor(model => model.EndDate)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.IsReceiptRequired):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.IsReceiptRequired)
+                @Html.ValidationMessageFor(model => model.IsReceiptRequired)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Published):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Published)
+                @Html.ValidationMessageFor(model => model.Published)
+            </td>
+        </tr>
+    </table>
+}
+
+@helper TabGifts()
+{
+    if (Model.Id > 0)
+    {
+    <div>
+        @(Html.Telerik().Grid<Nop.Admin.Models.Game.LuckyBoxDetailModel>()
+            .Name("luckyboxgifts-grid")
+            .DataKeys(x =>
+            {
+                x.Add(y => y.Id).RouteKey("Id");
+            })
+            .Columns(columns =>
+            {
+                columns.Bound(x => x.LuckyBoxId).Hidden();
+                columns.Bound(x => x.PictureThumbnailUrl)
+                            .ClientTemplate("<a href='<#= PictureThumbnailUrl #>' target='_blank'><img alt='<#= PictureId #>' src='<#= PictureThumbnailUrl #>' height='80' /><a/>")
+                            .ReadOnly();
+                columns.Bound(x => x.GiftName);
+                columns.Bound(x => x.NumberPerCycle).Width(200);
+                columns.Command(commands =>
+                {
+                    commands.Edit().Text(T("Admin.Common.Edit").Text);
+                    commands.Delete().Text(T("Admin.Common.Delete").Text);
+                }).Width(200);
+
+            })
+            .Editable(x =>
+            {
+                x.Mode(GridEditMode.InLine);
+            })
+            .DataBinding(dataBinding =>
+            {
+                dataBinding.Ajax().Select("ListGifts", "LuckyBox", new { luckyBoxId = Model.Id })
+                    .Update("UpdateGift", "LuckyBox")
+                    .Delete("DeleteGift", "LuckyBox");
+            })
+             .ClientEvents(e => e.OnError("onError"))
+            .EnableCustomBinding(true))
+    </div>
+    <script type="text/javascript">
+     
+        $(document).ready(function () {
+            $('#addLuckyBoxGift').click(function () {
+                var pictureId = $("#@Html.FieldIdFor(model => model.AddGiftModel.PictureId)").val();
+                var numberPerCycle = $("#@Html.FieldIdFor(model => model.AddGiftModel.NumberPerCycle)").val();
+                var giftName = $("#@Html.FieldIdFor(model => model.AddGiftModel.GiftName)").val();
+                
+                if (pictureId == 0) {
+                    alert('Vui lòng upload ảnh trước');
+                    return;
+                }
+
+                $('#addLuckyBoxGift').attr('disabled', true);
+                $.ajax({
+                    cache:false,
+                    type: "POST",
+                    url: "@(Url.Action("AddGift", "LuckyBox"))",
+                    data: { "pictureId": pictureId, "numberPerCycle": numberPerCycle, "giftName": giftName, "luckyBoxId": @Model.Id },
+                    success: function (data) {
+                        var luckyBoxGiftsGrid = $("#luckyboxgifts-grid");
+                        luckyBoxGiftsGrid.data('tGrid').ajaxRequest();
+                        $('#addLuckyBoxGift').attr('disabled', false);
+                    },
+                    error:function (xhr, ajaxOptions, thrownError){
+                        alert('Lỗi khi thêm quà:\n' + xhr.responseText);
+                        $('#addLuckyBoxGift').attr('disabled', false);
+                    }  
+                });
+            });
+        });
+        function onError(e) {
+            if (e.textStatus == 'error'){
+                if (e.XMLHttpRequest.status == "500") {
+                    alert("LỖI:\n" + e.XMLHttpRequest.responseText);
+                    e.preventDefault();
+                }
+            }
+        }
+    </script>
+    <p>
+        <strong>@T("Admin.Game.LuckyBoxDetail.AddNew")</strong>
+    </p>
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AddGiftModel.GiftName):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.AddGiftModel.GiftName)
+                @Html.ValidationMessageFor(model => model.AddGiftModel.GiftName)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AddGiftModel.PictureId):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.AddGiftModel.PictureId)
+                @Html.ValidationMessageFor(model => model.AddGiftModel.PictureId)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AddGiftModel.NumberPerCycle):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.AddGiftModel.NumberPerCycle)
+                @Html.ValidationMessageFor(model => model.AddGiftModel.NumberPerCycle)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="left">
+                <input type="button" id="addLuckyBoxGift" class="t-button" value="@T("Admin.Game.LuckyBoxDetail.AddButton")" />
+            </td>
+        </tr>
+    </table>
+    }
+    else
+    {
+    @T("Admin.Game.LuckyBoxDetail.SaveBeforeEdit")
+    }
+}

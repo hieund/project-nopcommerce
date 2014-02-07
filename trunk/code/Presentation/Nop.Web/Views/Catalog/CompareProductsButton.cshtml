@@ -1,0 +1,6 @@
+﻿@model AddToCompareListModel
+@using Nop.Web.Models.Catalog;
+<div class="compare-products">
+    @*<input type="button" value="@T("Products.Compare.AddToCompareList")" class="button-2 add-to-compare-list-button" onclick="CheckToCompare('@Model.ProductId')" />*@
+    <a href="javascript:void(0);" onclick="CheckToCompare('@Model.ProductId')">+ So sánh sản phẩm</a>
+</div>

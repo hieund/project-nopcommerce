@@ -1,0 +1,34 @@
+﻿@model QuickOrderModel
+@using Nop.Web.Models.Checkout;
+    <div class="form_quickorder">
+    <ul>
+        <li class="l">Họ tên</li>
+        <li class="r">
+            @*<input type="text" name="txtFullName" placeholder="Họ tên" />*@
+            @Html.TextBoxFor(m => m.BillingAddress.LastName, new { tabindex = 1, style = "width: 302px;", placeholder="Họ tên" })
+            <span class="formerror">Thông tin bắt buộc điền</span>
+        </li>
+        <li class="l">Số di động</li>
+        <li class="r">
+            @*<input type="text" name="txtMobile" placeholder="Số di động" maxlength="11" />*@
+            @Html.TextBoxFor(m => m.BillingAddress.PhoneNumber, new { tabindex = 2, style = "width: 302px;", placeholder="Số di động", maxlength="11"} )
+            <span class="formerror">Thông tin bắt buộc điền</span>
+        </li>
+        <li class="l">Email</li>
+        <li class="r">
+            @*<input type="text" name="txtMobile" placeholder="Số di động" maxlength="11" />*@
+            @Html.TextBoxFor(m => m.BillingAddress.Email, new { tabindex = 3, style = "width: 302px;", placeholder="Email liên hệ"} )
+            <span class="help">Vui lòng nhập email để chúng tôi liên hệ lại</span>
+        </li>
+        <li class="l h62">Địa chỉ giao hàng</li>
+        <li class="r h62">
+            @Html.TextAreaFor(m => m.BillingAddress.Address1, new { tabindex = 3, style = "height:60px;",placeholder="Địa chỉ giao hàng" })
+            <span class="help">Có thể ghi thêm các yêu cầu  khác của bạn. VD: Giao lúc 6h..</span>
+        </li>
+        <li class="l" style="line-height: 40px;"></li>
+        <li class="r" style="line-height: 40px;">
+
+            <a id="qo-cat-ver" href="javascript:void(0);" onclick="SubmitQuickOrder($('#frmCatQuickOrder'))" class="buy-button">Đặt Mua</a>
+        </li>
+    </ul>
+    </div>
