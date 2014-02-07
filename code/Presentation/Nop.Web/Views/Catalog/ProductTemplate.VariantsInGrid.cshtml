@@ -1,0 +1,243 @@
+﻿@model ProductDetailsModel
+@using Nop.Core.Domain.Seo;
+@using Nop.Core.Infrastructure;
+@using Nop.Web.Models.Catalog;
+@{
+    Layout = "~/Views/Shared/_Root.cshtml";
+
+    //title, meta
+    Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+    
+    
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        var productUrl = Url.RouteUrl("Product", new { SeName = Model.SeName }, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(productUrl);
+    }
+    //css
+    Html.AddCssFileParts("~/Themes/DefaultClean/Content/productdetail.css");
+    Html.AddCssFileParts("~/Scripts/royalslider/royalslider.css");
+    Html.AddCssFileParts("~/Scripts/royalslider/default/rs-default.css");
+    //js
+    Html.AddScriptParts("~/Scripts/productdetail.js");
+    Html.AddScriptParts("~/Scripts/slides.min.jquery.js");
+    Html.AddScriptParts("~/Scripts/royalslider/jquery.royalslider.min.js");
+    Html.AddScriptParts("~/Scripts/public.onepagecheckout.js");
+}
+@section META_INC {
+    
+    @Html.Raw(Model.MetaOgTitle)
+    @Html.Raw(Model.MetaOgDescription)
+    @Html.Raw(Model.MetaOgImg)
+    @Html.Raw(Model.MetaOgUrl)
+}
+<!--product breadcrumb-->
+@Html.Action("ProductBreadcrumb", "Catalog", new { productId = Model.Id })
+<div class="page product-details-page">
+    <div class="page-body">
+        @Html.Widget("productdetails_top")
+        
+            <div itemscope itemtype="http://schema.org/Product" data-productid="@Model.Id">
+                <div class="product-essential">
+
+                    <div class="content">
+                        <div class="contentrow">
+                            @Html.Widget("productdetails_before_pictures")
+                            <!--product pictures-->
+                            @Html.Partial("_ProductDetailsPictures", Model)
+                            @Html.Widget("productdetails_after_pictures")
+                            <div class="detail_col2">
+                                <div class="product-name">
+									<h1 itemprop="name" class="font24">
+										@Model.Name
+									</h1>
+								</div>
+                                <input type="hidden" id="hdProductname" value="@Model.Name" />
+                                @if(Model.ProductVariantModels.Count()>0)
+                                {
+                                <div class="boxcolor">
+                                    <span>Màu sắc  </span>
+                                    @foreach (var variant in Model.ProductVariantModels)
+                                    {
+                                        var dataDictColor = new ViewDataDictionary();
+                                        dataDictColor.TemplateInfo.HtmlFieldPrefix = string.Format("color_{0}", variant.Id);
+                                        @Html.Partial("_ProductVariantColor", variant.ProductVariantColor, dataDictColor)
+                                    }
+                                </div>
+                                }
+                                @{
+                                    var dataDictPrice = new ViewDataDictionary();
+                                    dataDictPrice.TemplateInfo.HtmlFieldPrefix = string.Format("price_{0}", Model.Id);
+                                    if (Model.ProductVariantModels != null && Model.ProductVariantModels.First() != null)
+                                    {
+                                                            @Html.Partial("_ProductVariantPrice", Model.ProductVariantModels.First().ProductVariantPrice, dataDictPrice)
+                                    }
+                                }
+                                <!--product SKU, manufacturer part number, stock info-->
+                                @if (Model.ProductVariantModels != null && Model.ProductVariantModels.First() != null)
+                                {
+                                    @Html.Partial("_ProductVariant_SKU_Man_Stock", Model.ProductVariantModels.First())
+                                }
+                                @if (!String.IsNullOrEmpty(Model.ShortDescription))
+                                {
+                                    <p>
+                                        @Html.Raw(Model.ShortDescription)
+                                    </p>
+                                }
+                                @if (Model.ProductVariantModels != null && Model.ProductVariantModels.First() != null)
+                                {
+                                    var variant = Model.ProductVariantModels.First();
+                                    if (!string.IsNullOrEmpty(variant.Promotion))
+                                        {
+                                    <p class="promotion" style="@(variant.ProductVariantPrice.PriceValue>0?"":"display:none;")">
+                                        <strong>Khuyến mãi:</strong><br />
+                                        @Html.Raw(variant.Promotion!=null?variant.Promotion.Replace("\r\n","<br />"):"")
+                                    </p>
+									}
+                                    
+                                }
+                                @Html.Action("CompareProductsButton", "Catalog", new { productId = Model.Id})
+                                @Html.Action("ShareButton", "Catalog")
+                                <div class="hotline-box">
+                                    <a href="ymsgr:sendim?ngoctruy87&amp;m=" class="yahoo">
+							            <img alt="Yahoo" src="/Themes/DefaultClean/Content/images/yahoo.png" />
+						            </a>
+                                    <a href="skype:nguyenngoctruy?chat" rel="nofollow" class="skype">
+							            <img border="0" alt="Skype" src="/Themes/DefaultClean/Content/images/skype.png" />
+						            </a>
+                                    <a href="javascript:void(0);" id="phone_hotline">
+                                        <img src="/Themes/DefaultClean/Content/images/phone.png" />
+                                        <span>190098485</span>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!--<div class="detail_col3">
+                                @*======button order========*@
+                                @*@{
+                                var dataDictAddToCart = new ViewDataDictionary();
+                                dataDictAddToCart.TemplateInfo.HtmlFieldPrefix = string.Format("addtocart_{0}", Model.Id);
+                                if (Model.ProductVariantModels != null && Model.ProductVariantModels.First() != null)
+                                {
+                                    @Html.Partial("_ProductVariantAddToCart", Model.ProductVariantModels.First().AddToCart, dataDictAddToCart)
+                                }
+                                }*@
+                                
+                                <p class="font18">Hỗ trợ trực tuyến </p>
+                                <p>
+                                    <img src="/Themes/DefaultClean/Content/images/yahoo.png" />
+                                    &nbsp;<img src="/Themes/DefaultClean/Content/images/skype.png" />
+                                </p>
+                                <p class="font18">Gọi đặt hàng & tư vấn:  </p>
+                                <p class="phone">
+                                    <img src="/Themes/DefaultClean/Content/images/phone.png" align="absmiddle" />
+                                    190098485
+                                </p>
+                                <p></p>
+                                
+                            </div>-->
+                        </div>
+                        <div class="contentrow">
+                            <div class="contentleft">
+                                <div id="tabs_container">
+                                    <ul id="tabs" class="tabs">
+                                        @if(!string.IsNullOrEmpty(Model.FullDescription))
+                                        {
+                                            <li class="active"><a href="#tab1">Mô tả</a></li>
+                                        }
+                                        @if(!string.IsNullOrEmpty(Model.HtmlSpec))
+                                        {
+                                            <li><a href="#tab2">Đặc tính sản phẩm</a></li>
+                                        }
+                                        <li><a href="#tab3">Nhận xét sản phẩm</a></li>
+                                    </ul>
+                                </div>
+                                <div id="tabs_content_container">
+                                    @if(!string.IsNullOrEmpty(Model.FullDescription))
+                                    {
+                                    <div id="tab1" class="tab_content">
+                                        @Html.Raw(Model.FullDescription)
+                                        
+                                    </div>
+                                    }
+                                    @if(!string.IsNullOrEmpty(Model.HtmlSpec))
+                                    {
+                                    <div id="tab2" class="tab_content">
+                                        @Html.Raw(Model.HtmlSpec)
+                                    </div>
+                                    }
+                                    <div id="tab3" class="tab_content">
+                                        @Html.Action("ProductReviews", "Catalog", new { productId = Model.Id })
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="contentright">
+                                @Html.Action("RelatedProducts", "Catalog", new { productId = Model.Id })
+                                @Html.Action("ProductTags", "Catalog", new { productId = Model.Id })
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="overview">
+                        <div class="product-name">
+                            <h1 itemprop="name">
+                                @Model.Name
+                            </h1>
+                        </div>
+                        @if (!String.IsNullOrEmpty(Model.ShortDescription))
+                        {
+                            <div class="short-description">
+                                @Html.Raw(Model.ShortDescription)
+                            </div>
+                        }
+                        @Html.Widget("productdetails_overview_top")
+                        <!--product manufacturers-->
+                        @Html.Action("ProductManufacturers", "Catalog", new { productId = Model.Id })
+                        <!--product reviews-->
+                        @Html.Action("ProductReviewOverview", "Catalog", new { productId = Model.Id })
+                        @Html.Action("ProductEmailAFriendButton", "Catalog", new { productId = Model.Id })
+                        @Html.Action("CompareProductsButton", "Catalog", new { productId = Model.Id })
+                        
+                        @Html.Widget("productdetails_overview_bottom")
+                    </div>
+                    @if (!String.IsNullOrEmpty(Model.FullDescription))
+                    {
+                        <div class="full-description" itemprop="description">
+                            @Html.Raw(Model.FullDescription)
+                        </div>
+                    }*@
+                </div>
+                @*@Html.Widget("productdetails_before_collateral")
+                <div class="product-collateral">
+                    <!--product variants-->
+                    <div class="product-variant-list">
+                        @foreach (var variant in Model.ProductVariantModels)
+                        {
+                            var dataDictVariant = new ViewDataDictionary();
+                            dataDictVariant.TemplateInfo.HtmlFieldPrefix = string.Format("variant_{0}", variant.Id);
+                            @Html.Partial("_ProductVariantLine", variant, dataDictVariant)
+                        }
+                    </div>
+                    @Html.Action("ProductSpecifications", "Catalog", new { productId = Model.Id })
+                    @Html.Action("ProductTags", "Catalog", new { productId = Model.Id })
+                    @Html.Action("ProductsAlsoPurchased", "Catalog", new { productId = Model.Id })
+
+                </div>
+                *@
+                
+                @*@foreach (ProductConfigModel obj in Model.ProductConfigModels.GroupBy(p=>p.PropertyId))
+                { 
+                    @obj.PropertyName<br />
+                }
+                @foreach (ProductConfigModel obj in Model.ProductConfigModels)
+                {
+                    @obj.Value<br />
+                }*@
+            </div>
+     
+        @Html.Widget("productdetails_bottom")
+    </div>
+</div>

@@ -1,0 +1,112 @@
+﻿@using Nop.Core.Infrastructure;
+@using Nop.Core.Domain.Catalog;
+@using Nop.Services.Catalog;
+@using Nop.Web.Extensions;
+@using Nop.Services.Seo;
+@using System.Text;
+@model Nop.Web.Models.Catalog.CategoryModel
+@if (Model.SubCategories.Count > 0)
+{
+    <li>
+        <a href="#">@Model.Name </a>
+        <div id="subcat" class="subcat">
+            @{
+    StringBuilder sb = new StringBuilder();
+    string strHtmlItem = "<li><a href=\"{0}\">{1}</a></li>";
+    int ColoumMod = Model.SubCategories.Count / 10;
+    int ColoumDiv = Model.SubCategories.Count % 10;
+    if (ColoumDiv > 0)
+    {
+        ColoumMod = ColoumMod + 1;
+    }
+
+    for (int col = 1; col <= ColoumMod; col++)
+    {
+        sb.Append("<li class=\"col\"><ul>");
+        for (int i = 0; i < Model.SubCategories.Count; i++)
+        {
+            if (col == 1)
+            {
+                sb.Append(string.Format(strHtmlItem, Url.RouteUrl("Category", new { SeName = Model.SubCategories[i].SeName }), Model.SubCategories[i].Name));
+            }
+            else if (i < (col + 1 * 10) && (i > col * 10))
+            {
+                sb.Append(string.Format(strHtmlItem, Url.RouteUrl("Category", new { SeName = Model.SubCategories[i].SeName }), Model.SubCategories[i].Name));
+            }
+        }
+        sb.Append("</ul></li>");
+    }
+            }
+            @if (ColoumMod > 1)
+            {
+                <ul class="col2">
+                    @Html.Raw(sb.ToString())
+                </ul>
+            }
+            else
+            {
+                <ul class="col1">
+                    @Html.Raw(sb.ToString())
+                </ul>
+            }
+
+        </div>
+        <img src="@Url.Content("/Themes/DefaultClean/Content/images/down.png")" />
+    </li>
+}
+else
+{
+    if (Model.ParentCategoryId > 0)
+    {
+        var _categoryserivce = EngineContext.Current.Resolve<ICategoryService>();
+        var category = _categoryserivce.GetCategoryById(Model.ParentCategoryId);
+        var lstcategory = _categoryserivce.GetAllCategoriesByParentCategoryId(Model.ParentCategoryId);
+        if (lstcategory.Count > 0)
+        { <li>
+            <a href="#">@Model.Name </a>
+            <div id="subcat" class="subcat">
+                @{
+            StringBuilder sb = new StringBuilder();
+            string strHtmlItem = "<li><a href=\"{0}\">{1}</a></li>";
+            int ColoumMod = lstcategory.Count / 10;
+            int ColoumDiv = lstcategory.Count % 10;
+            if (ColoumDiv > 0)
+            {
+                ColoumMod = ColoumMod + 1;
+            }
+            for (int col = 1; col <= ColoumMod; col++)
+            {
+                sb.Append("<li class=\"col\"><ul>");
+                for (int i = 0; i < lstcategory.Count; i++)
+                {
+                    if (col == 1)
+                    {
+                        sb.Append(string.Format(strHtmlItem, Url.RouteUrl("Category", new { SeName = lstcategory[i].GetSeName() }), lstcategory[i].Name));
+                    }
+                    else if (i < (col + 1 * 10) && (i > col * 10))
+                    {
+                        sb.Append(string.Format(strHtmlItem, Url.RouteUrl("Category", new { SeName = lstcategory[i].GetSeName() }), lstcategory[i].Name));
+                    }
+                }
+                sb.Append("</ul></li>");
+            }
+                }
+                @if (ColoumMod > 1)
+                {
+                    <ul class="col2">
+                        <li class="catparent"><a href="@Url.RouteUrl("Category", new { SeName = category.GetSeName() })">@category.Name</a></li>
+                        @Html.Raw(sb.ToString())
+                    </ul>
+                }
+                else
+                {
+                    <ul class="col1">
+                        <li class="catparent"><a href="@Url.RouteUrl("Category", new { SeName = category.GetSeName() })">@category.Name</a></li>
+                        @Html.Raw(sb.ToString())
+                    </ul>
+                }
+            </div>
+            <img src="@Url.Content("/Themes/DefaultClean/Content/images/down.png")" /></li>
+        }
+    }
+}

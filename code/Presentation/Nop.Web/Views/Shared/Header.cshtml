@@ -1,0 +1,30 @@
+﻿<div id="header">
+    @Html.Widget("header")
+    <div class="logo">
+        <a href="@Url.RouteUrl("HomePage")">
+            <img alt="Gadget City - Thời trang cho công nghệ" title="Gadget City - Thời trang cho công nghệ" src="/Themes/DefaultClean/Content/images/logo.png" />
+        </a>
+    </div>
+    @*<div class="header-links-wrapper">
+        @Html.Action("HeaderLinks", "Common")
+        @Html.Action("FlyoutShoppingCart", "ShoppingCart")
+    </div>*@
+    <div class="headerright">
+        @Html.Action("HeaderLinks", "Common")
+        <div class="search">
+            @Html.Action("SearchBox", "Catalog")
+        </div>
+    </div>
+    <div class="header-selectors-wrapper">
+        <div class="tax-display-type-selector">
+            @Html.Action("TaxTypeSelector", "Common")
+        </div>
+        <div class="currency-selector">
+            @Html.Action("CurrencySelector", "Common")
+        </div>
+        <div class="language-selector">
+            @Html.Action("LanguageSelector", "Common")
+        </div>
+        @Html.Widget("header_selectors")
+    </div>
+</div>

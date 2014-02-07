@@ -1,0 +1,8 @@
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.PayPalDirect\Description.txt
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.PayPalDirect\logo.jpg
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.PayPalDirect\Nop.Plugin.Payments.PayPalDirect.dll.config
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.PayPalDirect\Nop.Plugin.Payments.PayPalDirect.dll
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Payments.PayPalDirect\Nop.Plugin.Payments.PayPalDirect.pdb
+E:\sancovn.com\code\Plugins\Nop.Plugin.Payments.PayPalDirect\obj\Debug\Nop.Plugin.Payments.PayPalDirect.csprojResolveAssemblyReference.cache
+E:\sancovn.com\code\Plugins\Nop.Plugin.Payments.PayPalDirect\obj\Debug\Nop.Plugin.Payments.PayPalDirect.dll
+E:\sancovn.com\code\Plugins\Nop.Plugin.Payments.PayPalDirect\obj\Debug\Nop.Plugin.Payments.PayPalDirect.pdb

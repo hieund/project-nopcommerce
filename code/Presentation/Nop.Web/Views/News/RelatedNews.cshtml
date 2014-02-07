@@ -1,0 +1,16 @@
+﻿@model NewsItemListModel
+@using Nop.Web.Extensions;
+@using Nop.Web.Models.News;
+
+@if(Model.NewsItems.Count > 0)
+{
+<div class="related">
+    <ul>
+        TIN LIÊN QUAN
+        @foreach (var item in Model.NewsItems)
+        {
+        <li><a href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">@item.Title</a></li>
+        }
+    </ul>
+</div>
+}

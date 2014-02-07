@@ -1,0 +1,15 @@
+﻿@(Html.Telerik().Grid<CategoryModel.ProductPropertyValueMappingModel>()
+        .Name("GridPPVM")
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.SourceName).Width(200);
+            columns.Bound(o => o.DestinationName).Width(200);
+            columns.Bound(o => o.MappingType);
+        })
+        .DataBinding(dataBinding => dataBinding.Ajax())
+        .Pageable()
+        .Sortable()
+        .Scrollable()
+        .Groupable()
+        .Filterable()
+) 

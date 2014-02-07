@@ -1,0 +1,112 @@
+﻿@{
+    Layout = null;
+}
+@using Telerik.Web.Mvc.UI;
+@using Nop.Core.Domain.Catalog;
+@using Nop.Services.Catalog;
+@model CategoryModel.ProductPropertyValueMappingModel
+@{
+    
+    var _categoryService = EngineContext.Current.Resolve<ICategoryService>();
+    var lstPropertyvalue = new List<SelectListItem>();
+    var lstCategory = new List<SelectListItem>();
+
+    if (Convert.ToInt32(ViewBag.productpropertyId) > 0)
+    {
+
+        var productPropertyValues = _categoryService.GetProductPropertyValuesByProductPropertyIdForCategory(Convert.ToInt32(ViewBag.productpropertyId));
+
+        foreach (var c in productPropertyValues)
+        {
+            var item = new SelectListItem()
+            {
+                Text = c.Name,
+                Value = c.Id.ToString()
+            };
+            lstPropertyvalue.Add(item);
+        }
+    }
+
+    var allCategories = _categoryService.GetAllCategories(showHidden: true);
+
+    foreach (var c in allCategories)
+    {
+        var name = c.GetCategoryBreadCrumb(_categoryService);
+        if (name != null)
+        {
+            //Telerik has an issue when quotes are used. That'why we manually remove all quotes
+            //Find more info here: http://www.nopcommerce.com/boards/t/11413/tabs-can-not-be-selected-in-admin-edit-products.aspx
+            //TODO remove this code once it's fixed by Telerik team
+            name = name.Replace("\"", "");
+        }
+        var item = new SelectListItem()
+        {
+            Text = name,
+            Value = c.Id.ToString()
+        };
+        lstCategory.Add(item);
+    }
+}
+@using (Ajax.BeginForm("InsertProductPropertyValueMapping", "Category", new AjaxOptions { UpdateTargetId = "result" }))
+{
+    @Html.HiddenFor(model => model.SourceId);
+    @Html.HiddenFor(model => model.DestinationId);
+    @Html.HiddenFor(model => model.MappingType);
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">@T("Admin.Catalog.Categories.ProductProperty").Text</td>
+            <td class="adminData">@ViewBag.productpropertyName</td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@T("Admin.Catalog.Categories.ProductPropertyValueSource").Text</td>
+            <td class="adminData">
+                @(Html.Telerik().DropDownList().Name("PropertyValueListSource").BindTo(lstPropertyvalue)
+            .HtmlAttributes(new { style = "width:300px" })
+             .ClientEvents(events => events.OnChange("onChangePropertyValueListSource"))
+            )
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@T("Admin.Catalog.Categories.Name").Text</td>
+            <td class="adminData">
+                @(Html.Telerik().DropDownList().Name("Category")
+            .BindTo(lstCategory)
+            .ClientEvents(events => events.OnChange("onCategoryChange"))
+            .ClientEvents(events => events.OnDataBinding("onCategoryDataBinding"))
+            .ClientEvents(events => events.OnLoad("onCategoryOnLoad"))
+            .HtmlAttributes(new { style = "width:300px" }))
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@T("Admin.Catalog.Categories.ProductProperty").Text</td>
+            <td class="adminData">
+                @(Html.Telerik().DropDownList().Name("PropertyList")
+            .ClientEvents(events => events.OnChange("onPropertyListChange"))
+            .HtmlAttributes(new { style = "width:300px" }))
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@T("Admin.Catalog.Categories.ProductPropertyValueDestination").Text</td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.MappingType)
+                @(Html.Telerik().DropDownList().Name("PropertyValueListDestination")
+                .ClientEvents(events => events.OnChange("onChangePropertyValueListDestination"))
+               .HtmlAttributes(new { style = "width:200px" }))
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle"></td>
+            <td class="adminData">
+                <button class="t-button t-button-icontext" type="submit"><span class="t-icon t-update"></span>@T("Admin.Common.Update").Text</button>
+                <button class="t-button t-button-icontext" type="button" onclick="onCloseMappingPopup();"><span class="t-icon t-cancel"></span>@T("Admin.Common.Cancel").Text</button>
+            </td>
+        </tr>
+    </table>
+}
+<table class="adminContent">
+    <tr>
+        <td>
+            @{Html.RenderPartial("~/Administration/Views/Category/GridProductPropertyValueMapping.cshtml");}
+        </td>
+    </tr>
+</table>

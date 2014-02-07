@@ -1,0 +1,7 @@
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\DiscountRules.CustomerRoles\Description.txt
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\DiscountRules.CustomerRoles\logo.jpg
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\DiscountRules.CustomerRoles\Nop.Plugin.DiscountRules.CustomerRoles.dll
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\DiscountRules.CustomerRoles\Nop.Plugin.DiscountRules.CustomerRoles.pdb
+E:\sancovn.com\code\Plugins\Nop.Plugin.DiscountRules.CustomerRoles\obj\Debug\Nop.Plugin.DiscountRules.CustomerRoles.csprojResolveAssemblyReference.cache
+E:\sancovn.com\code\Plugins\Nop.Plugin.DiscountRules.CustomerRoles\obj\Debug\Nop.Plugin.DiscountRules.CustomerRoles.dll
+E:\sancovn.com\code\Plugins\Nop.Plugin.DiscountRules.CustomerRoles\obj\Debug\Nop.Plugin.DiscountRules.CustomerRoles.pdb

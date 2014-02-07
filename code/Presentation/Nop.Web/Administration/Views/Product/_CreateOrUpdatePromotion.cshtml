@@ -1,0 +1,349 @@
+﻿@model PromotionModel
+
+@using Telerik.Web.Mvc.UI;
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.Id)
+@Html.Telerik().TabStrip().Name("promotion-edit").Items(x =>
+{
+    x.Add().Text(T("Admin.Catalog.Promotion.Info").Text).Content(TabInfo().ToHtmlString()).Selected(true);
+    x.Add().Text(T("Admin.Catalog.Promotion.PromotionDetail").Text).Content(TabProductItems().ToHtmlString());
+    //generate an event
+    EngineContext.Current.Resolve<IEventPublisher>().Publish(new AdminTabStripCreated(x, "promotion-edit"));
+    var gridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSize;
+})
+@helper TabInfo()
+{ 
+    @(Html.LocalizedEditor<PromotionModel, PromotionLocalizedModel>("promotion-info-localized",
+                @<table class="adminContent">
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Locales[item].PromotionName):
+                        </td>
+                        <td class="adminData">
+                            @Html.TextBoxFor(model => Model.Locales[item].PromotionName, new { style = "width:250px" })
+                            @Html.ValidationMessageFor(model => model.Locales[item].PromotionName)
+                        </td>
+                    </tr>
+                    <tr style="display:none">
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Locales[item].Description):
+                        </td>
+                        <td class="adminData">
+                            @Html.TextAreaFor(model => model.Locales[item].Description)
+                            @Html.ValidationMessageFor(model => model.Locales[item].Description)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Locales[item].TotalAmount):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.Locales[item].TotalAmount)
+                            @Html.ValidationMessageFor(model => model.Locales[item].TotalAmount)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Locales[item].StartDate):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.Locales[item].StartDate)
+                            @Html.ValidationMessageFor(model => model.Locales[item].StartDate)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Locales[item].EndDate):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.Locales[item].EndDate)
+                            @Html.ValidationMessageFor(model => model.Locales[item].EndDate)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Published):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(x => x.Published)
+                            @Html.ValidationMessageFor(model => model.Published)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.DisplayOrder):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.DisplayOrder)
+                            @Html.ValidationMessageFor(model => model.DisplayOrder)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            @Html.HiddenFor(model => model.Locales[item].LanguageId)
+                        </td>
+                    </tr>
+                </table>
+                ,
+                @<table class="adminContent">
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.PromotionName):
+                        </td>
+                        <td class="adminData">
+                            @Html.TextBoxFor(model => Model.PromotionName, new { style = "width:100%" })
+                            @Html.ValidationMessageFor(model => model.PromotionName)
+                        </td>
+                    </tr>
+                    <tr style="display:none">
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Description):
+                        </td>
+                        <td class="adminData">
+                            @Html.TextAreaFor(x => x.Description)
+                            @Html.ValidationMessageFor(model => model.Description)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.TotalAmount):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.TotalAmount)
+                            @Html.ValidationMessageFor(model => model.TotalAmount)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.StartDate):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.StartDate)
+                            @Html.ValidationMessageFor(model => model.StartDate)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.EndDate):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.EndDate)
+                            @Html.ValidationMessageFor(model => model.EndDate)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Published):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(x => x.Published)
+                            @Html.ValidationMessageFor(model => model.Published)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.DisplayOrder):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.DisplayOrder)
+                            @Html.ValidationMessageFor(model => model.DisplayOrder)
+                        </td>
+                    </tr>
+                </table>
+            ))
+}
+@helper TabProductItems()
+{
+    var gridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSize;
+    if (Model.Id > 0)
+    {
+            <table width="100%">
+                <tr>
+                    <td class="adminTitle">
+                        @Html.NopLabelFor(model => model.SearchProductName):
+                    </td>
+                    <td class="adminData">
+                        @Html.EditorFor(model => Model.SearchProductName)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="adminTitle">
+                        @Html.NopLabelFor(model => model.SearchCategoryId):
+                    </td>
+                    <td class="adminData">
+                        @Html.DropDownList("SearchCategoryId", Model.AvailableCategories)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="adminTitle">
+                        @Html.NopLabelFor(model => model.SearchManufacturerId):
+                    </td>
+                    <td class="adminData">
+                        @Html.DropDownList("SearchManufacturerId", Model.AvailableManufacturers)
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="button" id="search-products" class="t-button" value="@T("Admin.Common.Search")" />
+                        <input type="button" id="delete-selected" class="t-button" value="@T("Admin.Common.Delete.Selected")" />
+                    </td>
+                </tr>
+            </table>
+            <p>
+            </p>
+            <table class="adminContent">
+                <tr>
+                    <td>
+                        @(Html.Telerik().Grid<PromotionDetailModel>()
+                        .Name("relatedproducts-grid")
+                            .DataKeys(keys =>
+                            {
+                                keys.Add(x => x.Id);
+                            })
+                            .Pageable(settings => settings.PageSize(gridPageSize).Position(GridPagerPosition.Both))
+                            .DataBinding(dataBinding =>
+                            {
+                                dataBinding.Ajax()
+                                    .Select("PromotionDetailList", "Product")
+                                    .Delete("PromotionDetailDelete", "Product");
+                            })
+                            .ClientEvents(events => events.OnDataBinding("onDataBinding"))
+                            .EnableCustomBinding(true)
+                            .Columns(columns =>
+                            {
+                                columns.Bound(x => x.Id)
+                                .Filterable(false)
+                                .ClientTemplate("<input type='checkbox' name='checkedRecords' value='<#= Id #>' class='checkboxGroups'/>")
+                                .Title("<input id='mastercheckbox' type='checkbox'/>")
+                                .Width(31)
+                                .HtmlAttributes(new { style = "text-align:center" })
+                                .HeaderHtmlAttributes(new { style = "text-align:center" });
+                                columns.Bound(x => x.ProductName)
+                                    .Width(300)
+                                    .ReadOnly();
+                                columns.Bound(x => x.CategoryName)
+                                    .Width(200)
+                                    .ReadOnly();
+                                columns.Bound(x => x.ManufacturerName)
+                                    .Width(200)
+                                    .ReadOnly();
+                                columns.Command(commands =>
+                                {
+                                    commands.Delete().Text(T("Admin.Common.Delete").Text);
+                                })
+                                .Width(180);
+                            })
+            .EnableCustomBinding(true))
+
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100%">
+                        <input type="submit" id="btnAddNewRelatedProduct" name="btnAddNewRelatedProduct" value="@T("Admin.Catalog.Products.RelatedProducts.AddNew")" onclick="javascript:OpenWindow('@(Url.Action("PromotionProductAddPopup", "Product", new { promotionId = Model.Id, promotionName = Model.PromotionName, btnId = "btnRefreshRelatedProducts", formId = "promotion-form" }))    ', 800, 800, true); return false;" class="t-button" />
+                        <input type="submit" id="btnRefreshRelatedProducts" name="btnRefreshRelatedProducts" style="display: none" />
+                        <script type="text/javascript">
+                            var selectedIds = [];
+                            $(document).ready(function () {
+                                $('#btnRefreshRelatedProducts').click(function () {
+                                    //refresh grid
+                                    var optionsGrid = $("#relatedproducts-grid");
+                                    optionsGrid.data('tGrid').ajaxRequest();
+
+                                    //return false to don't reload a page
+                                    return false;
+                                });
+                                //search button
+                                $('#search-products').click(function () {
+                                    //search
+                                    var grid = $('#relatedproducts-grid').data('tGrid');
+                                    grid.currentPage = 1; //new search. Set page size to 1
+                                    grid.ajaxRequest();
+                                    //clear selected checkboxes
+                                    $('.checkboxGroups').attr('checked', false).change();
+                                    selectedIds = [];
+                                    return false;
+                                });
+
+                                $("#@Html.FieldIdFor(model => model.SearchProductName)").keydown(function (event) {
+                                    if (event.keyCode == 13) {
+                                        $("#search-products").click();
+                                        return false;
+                                    }
+                                });
+
+
+                                $('#mastercheckbox').click(function () {
+                                    $('.checkboxGroups').attr('checked', $(this).is(':checked')).change();
+                                });
+
+                                //"Delete (selected)" button
+                                $('#delete-selected').click(function (e) {
+                                    debugger;
+                                    e.preventDefault();
+                                    //redirect to required URL
+                                    if(selectedIds.length>0)
+                                    {
+                                        setLocation('@(Url.Action("PromotionDetailDeleteSelected", "Product"))?selectedIds='+@Model.Id+ ',' + selectedIds.join(","));
+                                    }
+                                        return false;
+                                });
+
+                                //wire up checkboxes. 
+                                $('#relatedproducts-grid').on('change', 'input[type=checkbox][id!=mastercheckbox]', function (e) {
+                                    var $check = $(this);
+                                    if ($check.is(":checked") == true) {
+                                        var checked = jQuery.inArray($check.val(), selectedIds);
+                                        if (checked == -1) {
+                                            //add id to selectedIds.  
+                                            selectedIds.push($check.val());
+                                        }
+                                    }
+                                    else {
+                                        var checked = jQuery.inArray($check.val(), selectedIds);
+                                        if (checked > -1) {
+                                            //remove id from selectedIds.  
+                                            selectedIds = $.grep(selectedIds, function (item, index) {
+                                                return item != $check.val();
+                                            });
+                                        }
+                                    }
+                                    updateMasterCheckbox();
+                                });
+                            });
+                            function onDataBinding(e) {
+                                var searchModel = {
+                                    SearchProductName: $('#@Html.FieldIdFor(model => model.SearchProductName)').val(),
+                                    SearchCategoryId: $('#SearchCategoryId').val(),
+                                    SearchManufacturerId: $('#SearchManufacturerId').val(),
+                                };
+                                e.data = searchModel;
+                            }
+
+                            function onDataBound(e) {
+                                $('#relatedproducts-grid input[type=checkbox][id!=mastercheckbox]').each(function () {
+                                    var currentId = $(this).val();
+                                    var checked = jQuery.inArray(currentId, selectedIds);
+                                    //set checked based on if current checkbox's value is in selectedIds.  
+                                    $(this).attr('checked', checked > -1);
+                                });
+
+                                updateMasterCheckbox();
+                            }
+
+                            function updateMasterCheckbox() {
+                                var numChkBoxes = $('#relatedproducts-grid input[type=checkbox][id!=mastercheckbox]').length;
+                                var numChkBoxesChecked = $('#relatedproducts-grid input[type=checkbox][checked][id!=mastercheckbox]').length;
+                                $('#mastercheckbox').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                            }
+                        </script>
+                    </td>
+                </tr>
+            </table>
+        
+    }
+    else
+    {
+    @T("Admin.Catalog.Products.PromotionDetail.SaveBeforeEdit")
+    }
+}
+

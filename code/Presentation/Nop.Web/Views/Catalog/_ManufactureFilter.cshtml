@@ -1,0 +1,28 @@
+﻿@using Nop.Core.Infrastructure;
+@using Nop.Core.Domain.Catalog;
+@using Nop.Services.Catalog;
+@using Nop.Web.Extensions;
+@using Nop.Services.Seo;
+@model Nop.Web.Models.Catalog.ManufacturerModel
+
+<div class="divsearch">
+    <div class="divsearch_left">
+        <ul>
+            <li>
+                <img src="@Url.Content("/Themes/DefaultClean/Content/images/iconsearch.png")" align="absmiddle" />Tìm theo</li>
+            @{
+                var _categoryserivce = EngineContext.Current.Resolve<ICategoryService>();
+                
+            }
+            @Html.Partial("~/Views/Catalog/_ManufactureCategoryFilter.cshtml", Model)
+            @if (Model.PagingFilteringContext.PriceRangeFilter.Enabled)
+            {
+                @Html.Partial("_FilterPriceBox", Model.PagingFilteringContext.PriceRangeFilter, new ViewDataDictionary())
+            }
+        </ul>
+    </div>
+    <div class="divsearch_right">
+        @T("Categories.OrderBy")
+        @Html.DropDownList("products-orderby", Model.PagingFilteringContext.AvailableSortOptions, new { onchange = "setLocation(this.value);" })
+    </div>
+</div>

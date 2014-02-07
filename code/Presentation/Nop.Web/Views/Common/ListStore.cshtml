@@ -1,0 +1,27 @@
+﻿@model ContactUsModel
+@using Nop.Web.Models.Common;
+@{
+    Layout = "~/Views/Shared/_Root.cshtml";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.ListStore").Text);
+    Html.AddScriptParts("http://maps.googleapis.com/maps/api/js?sensor=false", true);
+}
+<div class="page contact-page">
+    <div class="page-title">
+        <h1>@T("PageTitle.ListStore")</h1>
+    </div>
+    <div class="page-body">
+        @Html.Widget("contactus_top")
+        @Html.Action("TopicBlock", "Topic", new { systemName = "ListStore" })
+        @Html.Widget("contactus_bottom")
+    </div>
+</div>
+<script>
+	$(window).load(function(){
+		var startupMap = document.getElementById("startupmap");
+		if (startupMap) {
+			eval(startupMap.value);
+		}
+	});
+</script>

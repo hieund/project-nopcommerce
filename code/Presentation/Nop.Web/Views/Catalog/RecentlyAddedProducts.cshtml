@@ -1,0 +1,44 @@
+﻿@model IList<ProductOverviewModel>
+@{
+    Layout = "~/Views/Shared/_Root.cshtml";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.RecentlyAddedProducts").Text);
+}
+@using Nop.Web.Models.Catalog;
+<div class="nav">
+    <ul>
+        <li>
+            <span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                <a href="@Url.RouteUrl("HomePage")" title="@T("Categories.Breadcrumb.Top")" itemprop="url">
+                    <span itemprop="title">@T("Categories.Breadcrumb.Top")</span>
+                </a>
+            </span>
+            <span class="delimiter">›</span>
+        </li>
+        <li>
+            <span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                <a href="@Url.RouteUrl("RecentlyAddedProducts")">@T("Products.NewProducts")</a>
+            </span>
+        </li>
+    </ul>
+</div>
+<div class="page recently-added-products-page">
+    <div class="page-title">
+        @*<a href="@Url.RouteUrl("RecentlyAddedProductsRSS")" class="link-rss" title="@T("Products.NewProducts.RSS.Hint")">@T("Products.NewProducts.RSS")</a>*@
+        @*<h1>@T("Products.NewProducts")</h1>*@
+    </div>
+    <div class="page-body">
+        @if (Model.Count > 0)
+        {
+            <div class="product">
+                @foreach (var product in Model)
+                {
+                    <div class="prosub">
+                        @Html.Partial("_ProductBox", product)
+                    </div>
+                }
+            </div>        
+        }
+    </div>
+</div>

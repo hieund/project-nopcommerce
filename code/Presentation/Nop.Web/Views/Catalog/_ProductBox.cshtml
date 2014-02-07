@@ -1,0 +1,100 @@
+﻿@model ProductOverviewModel
+@using Nop.Core.Domain.Orders
+@using Nop.Web.Models.Catalog;
+@using Nop.Core.Domain.Common;
+@using Nop.Core.Infrastructure;
+@{
+    var Datetimesetproductnew = EngineContext.Current.Resolve<CommonSettings>().Datetimesetproductnew;
+}
+@*@{
+    //prepare "Add to cart" AJAX link
+    string addtocartlink = "";
+    var shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
+    var quantity = 1;
+    if (Model.ProductPrice.ForceRedirectionAfterAddingToCart)
+    {
+        addtocartlink = Url.RouteUrl("AddProductToCart", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity, forceredirection = Model.ProductPrice.ForceRedirectionAfterAddingToCart });
+    }
+    else
+    {
+        addtocartlink = Url.RouteUrl("AddProductToCart", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity, });
+    }    
+}
+<div class="product-item" data-productid="@Model.Id">
+    <div class="picture">
+        <a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })" title="@Model.DefaultPictureModel.Title">
+            <img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" />
+        </a>
+    </div>
+    <div class="details">
+        <h2 class="product-title">
+            <a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })">@Model.Name</a>
+        </h2>
+        <div class="description">
+            @Html.Raw(Model.ShortDescription)
+        </div>
+        <div class="add-info">
+            <div class="prices">
+                @if (!String.IsNullOrEmpty(Model.ProductPrice.OldPrice))
+                {
+                    <span class="price old-price">@Model.ProductPrice.OldPrice</span>
+                }
+                <span class="price actual-price">@Model.ProductPrice.Price</span>
+            </div>
+            <div class="buttons">
+                @if (!Model.ProductPrice.DisableBuyButton)
+                {
+                    <input type="button" value="@(Model.ProductPrice.AvailableForPreOrder ? T("ShoppingCart.PreOrder") : T("ShoppingCart.AddToCart"))" class="button-2 product-box-add-to-cart-button" onclick="AjaxCart.addproducttocart('@addtocartlink    ');return false;" />
+                }
+            </div>
+            @Html.Widget("productbox_add_info")
+        </div>
+    </div>
+</div>*@
+
+@*<a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })" title="@Model.DefaultPictureModel.Title">
+    <img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" />
+</a>
+<p class="protitle"><a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })">@Model.Name</a></p>
+<p class="price">@(Model.ProductPrice.Price)
+    @if(!string.IsNullOrEmpty(Model.ProductPrice.OldPrice))
+    {
+    <span class="pricedown">@(Model.ProductPrice.OldPrice)</span>
+    }
+</p>*@
+@if (Model.ProductPrice.OldPriceValue > Model.ProductPrice.PriceValue)
+{
+    <div class="countdowncate">-@Math.Round((Model.ProductPrice.OldPriceValue - Model.ProductPrice.PriceValue) * 100 / Model.ProductPrice.OldPriceValue)%</div>
+}
+@if ((DateTime.Now - Model.CreateDate).TotalDays < Datetimesetproductnew)
+{
+    <div class="icon-new"></div>
+}
+<div class="prosubimg">
+    <a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })" title="@Model.DefaultPictureModel.Title">
+        <img src="@Model.DefaultPictureModel.ImageUrl" align="left" alt="@Model.DefaultPictureModel.AlternateText" title="@Model.DefaultPictureModel.Title" /></a>
+</div>
+<p class="clear"></p>
+<p class="prosub_title"><a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })" title="@Model.Name">@Model.Name</a></p>
+<p class="clear"></p>
+<p class="price">
+    @if (Model.ProductPrice.PriceValue > 0) 
+    {
+        @Model.ProductPrice.Price
+    }
+    @if (Model.ProductPrice.OldPriceValue > 0)
+    {
+        <span class="pricedown">@(Model.ProductPrice.OldPrice)</span>
+    }
+</p>
+@*<p class="clear"></p>
+<p>
+    <a href="#">
+        <div class="icon_cart"></div>
+    </a>
+    <a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })">
+        <div class="icon_view"></div>
+
+    </a>
+    <span class="sosanh"><a href="#">+ so sánh </a></span>
+</p>*@

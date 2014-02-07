@@ -1,0 +1,110 @@
+﻿@using Nop.Web.Models.Catalog;
+@using Nop.Web.Extensions;
+@model ProductConfigModel
+@{
+    Layout = "~/Views/Shared/_Root.cshtml";
+
+    //title
+    Html.AddTitleParts(string.Format(T("PageTitle.ProductsByTag").Text, Model.TagName));
+}
+<div class="nav">
+    <ul>
+        <li>
+            <span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                <a href="@Url.RouteUrl("HomePage")" title="@T("Categories.Breadcrumb.Top")" itemprop="url">
+                    <span itemprop="title">@T("Categories.Breadcrumb.Top")</span>
+                </a>
+            </span>
+            <span class="delimiter">›</span>
+        </li>
+        <li>
+            <span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                <a>@String.Format(T("Products.Tags.ProductsTaggedWith").Text, Model.TagName)</a>
+            </span>
+        </li>
+    </ul>
+</div>
+<div class="page product-tag-page">
+    @*<div class="page-title">
+        <h1>@String.Format(T("Products.Tags.ProductsTaggedWith").Text, Model.TagName)</h1>
+    </div>*@
+    <div class="page-body">
+        @Html.Widget("productsbytag_top")
+        <div class="product-selectors">
+        @*view mode*@
+        @*@if (Model.PagingFilteringContext.AllowProductViewModeChanging && Model.Products.Count > 0)
+        {
+            <div class="product-viewmode">
+                <span>@T("Categories.ViewMode")</span>
+                @Html.DropDownList("products-viewmode", Model.PagingFilteringContext.AvailableViewModes, new { onchange = "setLocation(this.value);" })
+            </div>
+        }*@
+        @*sorting*@
+        @if (Model.PagingFilteringContext.AllowProductSorting && Model.Products.Count > 0)
+        {
+            <div class="product-sorting" style="float:right;">
+                <span>@T("Categories.OrderBy")</span>
+                @Html.DropDownList("products-orderby", Model.PagingFilteringContext.AvailableSortOptions, new { onchange = "setLocation(this.value);" })
+            </div>
+        }
+        @*page size*@
+        @*@if (Model.PagingFilteringContext.AllowCustomersToSelectPageSize && Model.Products.Count > 0)
+        {
+            <div class="product-page-size">
+                <span>@T("Products.Tags.PageSize")</span>
+                @Html.DropDownList("products-pagesize", Model.PagingFilteringContext.PageSizeOptions, new { onchange = "setLocation(this.value);" })
+                <span>@T("Products.Tags.PageSize.PerPage")</span>
+            </div>
+        }*@
+        </div>
+        @Html.Widget("productsbytag_before_product_list")
+        @*product list*@
+        @if (Model.Products.Count > 0)
+        {
+            if (Model.PagingFilteringContext.ViewMode == "list")
+            {
+            @*list mode*@
+            @*<div class="product-list">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="item-box">
+                        @Html.Partial("_ProductBox", product)
+                    </div>
+                }
+            </div>    
+            *@<div class="product">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="prosub">
+                        @Html.Partial("_ProductBox", product)
+                    </div>
+                }
+            </div> 
+            }
+            else
+            {
+            @*grid mode*@
+            @*<div class="product-grid">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="item-box">
+                        @Html.Partial("_ProductBox", product)
+                    </div>
+                }
+            </div>*@
+            <div class="product">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="prosub">
+                        @Html.Partial("_ProductBox", product)
+                    </div>
+                }
+            </div>
+            }
+        }
+        <div class="pager">
+            @Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber")
+        </div>
+        @Html.Widget("productsbytag_bottom")
+    </div>
+</div>

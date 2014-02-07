@@ -1,0 +1,32 @@
+﻿@model System.Text.StringBuilder
+@{
+    Layout = "_AdminEmptyLayout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GadgetCity - Lucky box game</title>
+    <link href="~/Administration/Content/luckybox.css" type="text/css" rel="stylesheet" media="screen" />
+</head>
+<body>
+    <div id="lb-list">
+       @Html.Raw(Model)
+    </div>
+    <script>
+        window.onload = function () {
+            var l = document.getElementById("lb-list");
+            var rows = document.getElementsByClassName("r");
+            var h = 0;
+            for (var r in rows) {
+                h += 125;
+            }
+            l.style.top = (window.screen.availHeight - h) / 2 + "px";
+            l.style.left = (window.screen.availWidth - 820) / 2 + "px";
+            l.style.position = "absolute";
+        };
+    </script>
+</body>
+</html>

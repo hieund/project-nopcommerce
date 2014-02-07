@@ -1,0 +1,20 @@
+﻿@{
+    Layout = "~/Views/Shared/_Root.cshtml";
+    //Html.AddScriptParts("~/Scripts/productdetail.js");
+    Html.AddScriptParts("~/Scripts/jquery.carouFredSel-6.0.4-packed.js");
+}
+<div class="page home-page">
+    <div class="page-body">
+        @Html.Widget("home_page_top")
+        @*@Html.Action("TopicBlock", "Topic", new { systemName = "HomePageText" })*@
+        @*@Html.Action("HomepageCategories", "Catalog")*@
+        <div id="main">
+            @*@Html.Action("HomepageBestSellers", "Catalog", new { productThumbPictureSize = 125 })*@
+            @Html.Action("HomepageProducts", "Catalog", new { productThumbPictureSize = 125 })
+            @Html.Action("HomePageCollections", "Catalog", new { productThumbPictureSize = 300 })
+        </div>
+        @*@Html.Action("HomePageNews", "News")*@
+        @*@Html.Action("HomePagePolls", "Poll")*@
+        @Html.Widget("home_page_bottom")
+    </div>
+</div>

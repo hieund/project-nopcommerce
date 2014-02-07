@@ -1,0 +1,359 @@
+﻿@{
+    Layout = "_AdminEmptyLayout";
+}
+@model Nop.Admin.Models.Game.LuckyBoxModel
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Lucky Box - Gadget City</title>
+    @*<link href="@Url.Content("~/Administration/Content/luckybox.css")" type="text/css" rel="stylesheet" media="screen" />
+    <script src="@Url.Content("~/Administration/Scripts/jquery-1.10.1.js")"></script>
+    <script src="@Url.Content("~/Administration/Scripts/TweenMax.min.js")"></script>*@
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-wip/css/bootstrap.min.css">
+    <link href="~/Administration/Content/luckybox.css" type="text/css" rel="stylesheet" media="screen" />
+    <link href="~/Administration/Content/jquery.fancybox.css" type="text/css" rel="stylesheet" media="screen" />
+    <script src="~/Administration/Scripts/jquery-1.10.1.js"></script>
+    <script src="~/Administration/Scripts/TweenMax.min.js"></script>
+    <script src="~/Administration/Scripts/jquery.fancybox.pack.js"></script>
+
+    <script>
+        CSSPlugin.defaultTransformPerspective = 500;
+        var boxes = [];
+        var boxesr = [];
+        var cols = @Model.Columns, rows = @Model.Rows, boxWidth = 100, boxHeight = 100, leftBorder = 200, topBorder = 10;
+        var maxBoxes = @(Model.Columns * Model.Rows);
+        var tl = new TimelineMax();
+        var r = 0, maxRotate = 10; //Rotate count
+        var boxOpened = false, isRotating = true, outOfGifts = @(Model.WinCycle <= Model.Draws.Count ? "true" : "false");
+
+		$(window).on("resize", function () {
+			redrawLayout();
+		}).resize();
+
+        function redrawLayout() {
+            $("#luckysquare").css("width", @(Model.Columns) * (boxWidth + 1) + 1 + "px");
+            $("#luckysquare").css("left", ($(window).width() - (@(Model.Columns) * (boxWidth + 1) + 1)) / 2 + "px");
+            $("#luckysquare").css("height", @(Model.Rows) * (boxHeight + 1) + 1 + "px");
+            $("#luckysquare").css("top", ($(window).height() - (@(Model.Rows) * (boxHeight + 1) + 1)) / 2 + "px");
+            //$("#luckysquare").css("top", "65px");
+
+            $("#luckysquarer").css("width", @(Model.Columns) * (boxWidth + 1) + 1 + "px");
+            $("#luckysquarer").css("left", ($(window).width() - (@(Model.Columns) * (boxWidth + 1) + 1)) / 2 + "px");
+            $("#luckysquarer").css("height", @(Model.Rows) * (boxHeight + 1) + 1 + "px");
+            $("#luckysquarer").css("top", ($(window).height() - (@(Model.Rows) * (boxHeight + 1) + 1)) / 2 + "px");
+            //$("#luckysquarer").css("top", "65px");
+
+            $("#luckyboxguider").css("left", ($(window).width() - $("#luckyboxguider").width()) / 2 + "px");
+            $("#luckyboxguider").show();
+        }
+        function init() {
+            redrawLayout();
+            var luckysquare = document.getElementById("luckysquare");
+            TweenMax.to(luckysquare, .3, {
+                boxShadow: "10px 10px 10px",
+                backgroundColor: "#fff"
+            });
+            var luckysquarer = document.getElementById("luckysquarer");
+            TweenMax.to(luckysquarer, 0, {
+                boxShadow: "10px 10px 10px",
+                backgroundColor: "#fff"
+            });
+
+            for (var i = 0; i < maxBoxes; i++) {
+                var b = document.getElementById("box" + i);
+                boxes.push(b);
+                b.style.left = top + "px";
+                b.style.top = (Math.floor(i / cols) * (boxHeight + 1)) + "px";
+
+                var br = document.getElementById("boxr" + i);
+                boxesr.push(br);
+                br.style.left = top + "px";
+                br.style.top = (Math.floor(i / cols) * (boxHeight + 1)) + "px";
+            }
+
+            for (var i = 0; i < maxBoxes; i++) {
+                tl.to(boxes[i], 1, { css: { left: Math.floor(i % cols) * (boxWidth + 1) }, ease: Expo.easeInOut }, -0.02 * (i / cols));
+                tl.to(boxesr[i], 0, { css: { left: Math.floor(i % cols) * (boxWidth + 1) }, ease: Expo.easeInOut }, -0.02 * (i / cols));
+            }
+        }
+        function replace() {
+            document.getElementById("luckysquare").style.display = "none";
+            document.getElementById("luckysquarer").style.display = "block";
+        }
+        function done() {
+            var b = document.getElementById("box");
+            b.innerHTML = "<h3 style=\"color:#fff\">Chúc mừng bạn!</h3>";
+        }
+
+        function doRotate() {
+            if (outOfGifts) {
+                alert("Số lượt chơi của Ô may mắn đã hết!");
+                return;
+            }
+            for (var i=0; i<maxBoxes;i++){
+                TweenMax.to(boxes[i], 0.5, {
+                    css: {rotationY: 90, z: -500, rotationX: 20, alpha: 0.3}, 
+                    ease:Expo.easeIn
+                });
+            }
+            setTimeout("replace()", 500);
+            setTimeout("makeRotate()", 1200);
+        }
+        function makeRotate() {
+            r = 0;
+            rotate();
+        }
+        function rotate() {
+            for (var i = 0; i < maxBoxes; i++) {
+                TweenMax.to(boxesr[i],
+                    1,
+                    {
+                        css:
+                        {
+                            left: (Math.random(cols - 1) * (cols - 1) * boxWidth),
+                            top: (Math.random(rows - 1) * (rows - 1) * boxHeight)
+                        },
+                        ease: Expo.easeOut
+                    });
+            }
+            if (r < maxRotate) {
+                window.setTimeout("rotate()", (maxRotate / 2) * 500 / (maxRotate % (r / 2) + maxRotate));
+                r++;
+            }
+            else {
+                stop();
+            }
+        }
+        function stop() {
+            for (var i = 0; i < maxBoxes; i++) {
+                TweenMax.to(boxesr[i], 2,
+                    {
+                        css: { left: Math.floor(i % cols) * (boxWidth + 1), top: Math.floor(i / cols) * (boxHeight + 1) },
+                        ease: Expo.easeOut, delay: 0.02
+                    });
+            }
+            isRotating = false;
+            //$("#luckyboxguider").html("<h2>Mời Quý khách mở một Ô may mắn.</h2>").fadeIn(300);
+        }
+        function getLuckyResult(idx) {
+            $("#luckyboxwinerform").css("display", "none");
+            if (isRotating)
+                return;
+            $("#luckycontent").html("<h2>Xin vui lòng chờ trong giây lát...<h2>");
+            if (boxOpened) {
+                $("#luckycontent").html("<h2>Quý khách đã mở hộp quà may mắn,<br />vui lòng dùng lượt chơi khác!</h2><h3><div id=\"luckyboxreplay\" onclick=\"replay();\">Chơi lại</div></h3>");
+                $.fancybox.open(document.getElementById("luckyresult"), 
+                { 
+                    'padding'         : 0, 
+                    'margin'          : 0,
+                    'transitionIn'	: 'elastic',
+                    'transitionOut'	: 'elastic' 
+                });
+                return;
+            }
+            $.fancybox.open(document.getElementById("luckyresult"), 
+                { 
+                    'padding'         : 0, 
+                    'margin'          : 0,
+                    'transitionIn'	: 'elastic',
+                    'transitionOut'	: 'elastic' 
+                });
+            $.ajax({
+                url: "/Admin/Game/OpenLuckyBox/@Model.Id?luckyBoxId=@Model.Id&boxId=" + idx,
+                type: "POST",
+                data: { luckyBoxId: @Model.Id, boxId: idx, luckyDrawId: $("#luckyDrawId").val() },
+                cache: false,
+                error: function(xhr, status) {
+                    $("#luckycontent").html("<h2>Chúc Quý khách may mắn lần sau!<h2><h3><img src=\"@Url.Content("~/Administration/Content/images/goodluck.png")\" /></h3><div class=\"form-group\"><div class=\"col-lg-12\" style=\"text-align: center;\"><img src=\"@Url.Content("~/Administration/Content/images/magicbox.png")\" style=\"width: 670px; margin-top: 100px\" alt=\"magic box\" /></div></div>");
+                    boxOpened = true;
+                },
+                success: function(result) {
+                    if (!result) {
+                        $("#luckycontent").html("<h2>Chúc Quý khách may mắn lần sau!<h2><h3><img src=\"@Url.Content("~/Administration/Content/images/goodluck.png")\" /></h3><div class=\"form-group\"><div class=\"col-lg-12\" style=\"text-align: center;\"><img src=\"@Url.Content("~/Administration/Content/images/magicbox.png")\" style=\"width: 670px; margin-top: 100px\" alt=\"magic box\" /></div></div>");
+                    }
+                    else {
+                        $("#luckycontent").html("<h1>Xin chúc mừng " + result.WinDraw.CustomerName + "!</h1><img src=\"@Url.Content("~/Administration/Content/images/congrats.gif")\" class=\"congrat\" alt=\"congrat\"/><h3>Quà tặng của Quý khách là một <span class=\"wp\">" + result.GiftName + "</span>!<h3>" 
+                            + "<h3><img src=\"" + result.PictureThumbnailUrl + "\" class=\"gift\" /></h3>"
+                            + "<h3>Mã quà tặng của Quý khách là: " + result.WinDraw.LuckyBoxCode + "</h3>"
+                            + "<h4>(Vui lòng giữ màn hình và liên hệ nhân viên để nhận quà tặng)</h4>");
+                        $("#luckyDrawId").val(result.WinDraw.Id);
+                        $("#luckyboxwinerform").css("display", "none");
+                    }
+                    boxOpened = true;
+                }
+            });
+        }
+        function replay() {
+            window.location = "@Request.Url.AbsolutePath";
+        }
+        function getLuckyResultTest(idx) {
+            doRotate();
+        }
+        function submitWinnerInfo() {
+            $.ajax({
+                url: "/Admin/Game/PostWinnerInfo/@Model.Id?luckyBoxId=@Model.Id",
+                type: "POST",
+                data: { luckyDrawId: 0, custName: $("#custName").val(), custPhone: $("#custPhone").val(), custEmail: $("#custEmail").val(), receiptNo: $("#receiptNo").val(), custAddress: $("#custAddress").val() },
+                cache: false,
+                error: function(xhr, status) {
+                    alert(status);
+                },
+                success: function(result) {
+                    if (!result || !result.Id) {
+                        $("#luckyboxerrormsg").html(result);
+                        $("#luckyboxerrormsg").show(300);
+                    }
+                    else {
+                        $.fancybox.close(document.getElementById("luckyresult"));
+                        $("#luckyDrawId").val(result.Id);
+                        doRotate();
+                    }
+                }
+            });
+        }
+        function showPlayerForm(idx) {
+            $("#luckycontent").html("<h2>Thông tin khách hàng<h2>");
+            $("#luckyboxwinerform").css("display", "block");
+            $.fancybox.open(document.getElementById("luckyresult"), 
+                { 
+                    'padding'         : 0, 
+                    'margin'          : 0,
+                    'transitionIn'	: 'elastic',
+                    'transitionOut'	: 'elastic' 
+                });
+        }
+        function showHelp() {
+            $.fancybox.open(document.getElementById("help"), 
+                { 
+                    'padding'         : 0, 
+                    'margin'          : 0,
+                    'transitionIn'	: 'elastic',
+                    'transitionOut'	: 'elastic' 
+                });
+        }
+		</script>
+
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-wip/js/bootstrap.min.js"></script>
+</head>
+
+<body onload="init()">
+    <div id="luckysquare">
+        @{
+            int i = 0;
+            foreach (var lbdm in Model.LuckyTableDisplay)
+            {
+            <img id="box@(i)" class="box" onclick="showPlayerForm(@i);" src="@(lbdm == null ? Url.Content("~/Administration/Content/images/smile.png") : lbdm.PictureThumbnailUrl)" />
+                i++;
+            }
+        }
+    </div>
+    <div id="luckysquarer">
+        @{
+            i = 0;
+            foreach (var lbdm in Model.LuckyTableDisplay)
+            {
+            <img id="boxr@(i)" class="box" onclick="getLuckyResult(@i);" src="@Url.Content("~/Administration/Content/images/gift.png")" />
+                i++;
+            }
+        }
+    </div>
+    <div id="luckyresult">
+        <div class="form-group">
+            <div id="luckycontent"></div>
+        </div>
+        <div id="luckyboxwinerform">
+            <form action="/Admin/Game/UpdateWinnerInfo/@Model.Id?luckyBoxId=@Model.Id" method="post" class="form-horizontal">
+                <input type="hidden" id="luckyDrawId" name="luckyDrawId" value="0" />
+                <input type="hidden" id="luckyBoxCode" name="luckyBoxCode" value="0" />
+                <div class="form-group">
+                    <div class="col-lg-2">
+                        <label for="custName" class="control-label">Họ tên</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="custName" name="custName" class="form-control" placeholder="Vui lòng nhập Họ tên" />
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="custPhone" class="control-label">Số ĐT</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="custPhone" name="custPhone" class="form-control" placeholder="Vui lòng nhập Số ĐT" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-2">
+                        <label for="custEmail" class="control-label">Email</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="custEmail" name="custEmail" class="form-control" />
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="receiptNo" class="control-label">Số hóa đơn</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="receiptNo" name="receiptNo" class="form-control" placeholder="@(Model.IsReceiptRequired ? "Vui lòng nhập Số hóa đơn" : "")" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-2">
+                        <label for="custAddress" class="control-label">Địa chỉ</label>
+                    </div>
+                    <div class="col-lg-10">
+                        <input type="text" id="custAddress" name="custAddress" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-12" style="text-align: center;">
+                        <input class="btn btn-primary" type="button" onclick="submitWinnerInfo();" value="Tham gia" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-12" style="text-align: center;">
+                        <div id="luckyboxerrormsg"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-12" style="text-align: center;">
+                        <img src="@Url.Content("~/Administration/Content/images/magicbox.png")" style="width: 670px;" alt="magic box" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="luckyboxguider">
+        <h2>@if (Model.WinCycle <= Model.Draws.Count)
+            {
+            @("Số lượt chơi của Ô may mắn đã hết.");
+            }
+            else
+            {
+            @(Html.Raw("<img src=\"" + Url.Content("~/Administration/Content/images/MagicBox.png") + "\" alt=\"\" />"));
+            }
+        </h2>
+    </div>
+    <div id="logo-bottom">
+        <img src="@Url.Content("~/Administration/Content/images/GalaxyStore_800.png")" alt="Galaxy store" />
+    </div>
+    <div class="help-anchor" onclick="showHelp();">
+        <img src="@Url.Content("~/Administration/Content/images/help.png")" alt="help" />
+    </div>
+    <div id="help">
+        <h2>Hướng Dẫn Tham Gia</h2>
+        <div>
+            <ol class="bs-callout bs-callout-info">
+                <li>Click vào bảng ô may mắn để kích hoạt chương trình.</li>
+                <li>Nhập thông tin của quý khách hàng để đối chiếu thông tin khi nhận quà.</li>
+                <li>Click vào nút "Tham Gia" sau khi nhập đầy đủ thông tin.</li>
+                <li>Chọn một ô may mắn bất kỳ để nhận được những quà tặng bất ngờ.</li>
+            </ol>
+            <h4>Chú ý:</h4>
+            <ul class="bs-callout bs-callout-info">
+                <li>Chương trình chỉ áp dụng cho những khách hàng trực tiếp tham gia tại các cửa hàng SES do PetroRetail quản lý.</li>
+                <li>Quà tặng không có giá trị quy đổi thành tiền mặt.</li>
+                <li>Chương trình hoàn toàn miễn phí cho tất cả khách hàng.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

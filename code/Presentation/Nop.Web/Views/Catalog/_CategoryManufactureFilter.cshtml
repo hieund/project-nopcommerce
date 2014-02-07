@@ -1,0 +1,29 @@
+﻿@using Nop.Core.Infrastructure;
+@using Nop.Core.Domain.Catalog;
+@using Nop.Services.Catalog;
+@using Nop.Web.Extensions;
+@using Nop.Services.Seo;
+@using System.Text;
+@model Nop.Web.Models.Catalog.CategoryModel
+
+@{
+    var _manufactureserivice = EngineContext.Current.Resolve<IManufacturerService>();
+    var listmanufacture = _manufactureserivice.GetListManufacturerByCategoryId(Model.Id);
+    
+}
+
+@if (listmanufacture != null && listmanufacture.Count > 0)
+{
+    <li>
+        <a href="@Url.RouteUrl("Category", new { SeName = Model.SeName })">@T("admin.catalog.manufacturers")</a>
+        <div id="subcat" class="subcat">
+            <ul class="col1">
+                @foreach (var manufacturer in listmanufacture)
+                {
+                    <li><a href="@Url.RouteUrl("Category", new { SeName = manufacturer.GetSeName() })">@manufacturer.Name </a></li>
+                }
+            </ul>
+        </div>
+        <img src="@Url.Content("/Themes/DefaultClean/Content/images/down.png")" />
+    </li>
+}

@@ -1,0 +1,14 @@
+E:\sancovn.com\code\Libraries\Nop.Data\bin\Debug\Nop.Data.dll
+E:\sancovn.com\code\Libraries\Nop.Data\bin\Debug\Nop.Data.pdb
+E:\sancovn.com\code\Libraries\Nop.Data\bin\Debug\EntityFramework.dll
+E:\sancovn.com\code\Libraries\Nop.Data\bin\Debug\Nop.Core.dll
+E:\sancovn.com\code\Libraries\Nop.Data\bin\Debug\System.Data.SqlServerCe.dll
+E:\sancovn.com\code\Libraries\Nop.Data\bin\Debug\System.Data.SqlServerCe.Entity.dll
+E:\sancovn.com\code\Libraries\Nop.Data\bin\Debug\Autofac.dll
+E:\sancovn.com\code\Libraries\Nop.Data\bin\Debug\Autofac.Integration.Mvc.dll
+E:\sancovn.com\code\Libraries\Nop.Data\bin\Debug\Nop.Core.pdb
+E:\sancovn.com\code\Libraries\Nop.Data\bin\Debug\EntityFramework.xml
+E:\sancovn.com\code\Libraries\Nop.Data\bin\Debug\Autofac.xml
+E:\sancovn.com\code\Libraries\Nop.Data\obj\Debug\Nop.Data.csprojResolveAssemblyReference.cache
+E:\sancovn.com\code\Libraries\Nop.Data\obj\Debug\Nop.Data.dll
+E:\sancovn.com\code\Libraries\Nop.Data\obj\Debug\Nop.Data.pdb

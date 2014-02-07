@@ -1,0 +1,60 @@
+﻿@model CatalogPagingFilteringModel.PriceRangeFilterModel
+@using Nop.Web.Models.Catalog;
+@{
+    var selectedItem = Model.Items.FirstOrDefault(x => x.Selected);
+}
+@helper FormatPriceRangeText(CatalogPagingFilteringModel.PriceRangeFilterItem filterItem)
+{
+    string rangeText = "";
+    if (String.IsNullOrWhiteSpace(filterItem.From))
+    {
+        rangeText = string.Format(T("Filtering.PriceRangeFilter.Under").Text, string.Format("<span class=\"PriceRange\">{0}</span>", filterItem.To));
+    }
+    else if (String.IsNullOrWhiteSpace(filterItem.To))
+    {
+        rangeText = string.Format(T("Filtering.PriceRangeFilter.Over").Text, string.Format("<span class=\"PriceRange\">{0}</span>", filterItem.From));
+    }
+    else
+    {
+        rangeText = string.Format("<span class=\"PriceRange\">{0}</span> - <span class=\"PriceRange\">{1}</span>", filterItem.From, filterItem.To);
+    }
+    <text>@Html.Raw(rangeText)</text>
+}
+@if (Model.Enabled)
+{
+    if (selectedItem == null)
+    {
+    <li><a href="#">Mức giá </a>
+        <img src="@Url.Content("/Themes/DefaultClean/Content/images/down.png")" />
+        <div id="subcat" class="subcat">
+            <ul class="price-range-selector">
+                @foreach (var item in Model.Items)
+                {
+                    <li><a href="@item.FilterUrl">@FormatPriceRangeText(item)</a> </li>
+                }
+            </ul>
+        </div>
+    </li>
+    }
+    else
+    {
+    <li><a href="#">@FormatPriceRangeText(selectedItem) </a>
+        <img src="@Url.Content("/Themes/DefaultClean/Content/images/down.png")" />
+        <div id="subcat" class="subcat">
+            <ul class="price-range-selector">
+                @foreach (var item in Model.Items)
+                {
+                    <li><a href="@item.FilterUrl">@FormatPriceRangeText(item)</a> </li>
+                }
+            </ul>
+        </div>
+    </li>
+@*
+    <div class="selected-price-range">
+        @FormatPriceRangeText(selectedItem)
+    </div>*@
+    <li class="remove-filter">
+        <a href="@Model.RemoveFilterUrl" class="remove-price-range-filter">@T("Filtering.PriceRangeFilter.Remove")</a>
+    </li>
+    }
+}

@@ -1,0 +1,65 @@
+﻿@model Nop.Admin.Models.Game.LuckyBoxListModel
+@{
+    //page title
+    ViewBag.Title = T("Admin.Game.LuckyBox.Manage").Text;
+}
+@using (Html.BeginForm())
+{
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-catalog.png")" alt="" />
+            @T("Admin.Game.LuckyBox.Manage")
+        </div>
+        <div class="options">
+            <a href="@Url.Action("Create")" class="t-button">@T("Admin.Common.AddNew")</a>
+        </div>
+    </div>
+    <table class="adminContent">
+        <tr>
+            <td>
+                @(Html.Telerik().Grid<Nop.Admin.Models.Game.LuckyBoxModel>(Model.LuckyBoxes.Data)
+                    .Name("luckybox-grid")
+                    .ClientEvents(events => events
+                        .OnDataBinding("onDataBinding"))
+                    .Columns(columns =>
+                    {
+                        columns.Bound(x => x.Name).Template(
+                                @<a href="~/Admin/Game/LuckyBox/@item.Id">@item.Name</a>
+                            ).Width(300);
+                        columns.Bound(x => x.BeginDate).Width(300).Centered();
+                        columns.Bound(x => x.EndDate).Width(300).Centered();
+                        columns.Bound(x => x.Rows).Centered();
+                        columns.Bound(x => x.Columns).Centered();
+                        columns.Bound(x => x.WinCycle).Centered();
+                        columns.Bound(x => x.IsReceiptRequired)
+                            .Template(
+                                @<img alt="" src="@Url.Content("~/Administration/Content/images/active-" + item.IsReceiptRequired.ToString().ToLowerInvariant() + ".gif")" />
+                            )
+                            .ClientTemplate("<img alt='' src='" + Url.Content("~/Administration/Content/images/") + "active-<#= IsReceiptRequired #>.gif' />")
+                            .Centered()
+                            .Width(100);
+                        columns.Bound(x => x.Published)
+                            .Template(
+                                @<img alt="" src="@Url.Content("~/Administration/Content/images/active-" + item.Published.ToString().ToLowerInvariant() + ".gif")" />
+                            )
+                            .ClientTemplate("<img alt='' src='" + Url.Content("~/Administration/Content/images/") + "active-<#= Published #>.gif' />")
+                            .Centered()
+                            .Width(100);
+                        columns.Bound(x => x.Id)
+                            .Width(50)
+                            .Centered()
+                            .Template(x => Html.ActionLink(T("Admin.Common.Edit").Text, "Edit", new { id = x.Id }))
+                            .ClientTemplate("<a href=\"Edit/<#= Id #>\">" + T("Admin.Common.Edit").Text + "</a>")
+                            .Title(T("Admin.Common.Edit").Text);
+                    })
+                                                                    .DataBinding(dataBinding => dataBinding.Ajax().Select("List", "LuckyBox"))
+                                                                    .EnableCustomBinding(true))
+            </td>
+        </tr>
+    </table>
+}
+
+<script type="text/javascript">
+    function onDataBinding(e) {
+    }
+</script>

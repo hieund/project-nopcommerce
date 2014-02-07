@@ -1,0 +1,40 @@
+﻿@model CatalogPagingFilteringModel.PropertiesFilterModel
+@using Nop.Web.Models.Catalog;
+@{
+    var lstpp = Model.Items.GroupBy(pp => pp.PropertyId).Select(grp => grp.ToList()).ToList();
+}
+@if (lstpp.Count > 0)
+{
+    foreach (var p in lstpp)
+    {
+        var selected = p.Where(s => s.Selected).ToList();
+        if (selected.Count() > 0)
+        {
+    <li><a href="#">@selected[0].ValueName </a>
+        <img src="@Url.Content("/Themes/DefaultClean/Content/images/down.png")" />
+        <div id="subcat" class="subcat">
+            <ul class="price-range-selector">
+                @foreach (var item in p)
+                {
+                    <li><a href="@item.FilterUrl">@item.ValueName</a></li>
+                }
+            </ul>
+        </div>
+    </li>
+        }
+        else
+        {
+    <li><a href="#">@p.First().PropertyName</a>
+        <img src="@Url.Content("/Themes/DefaultClean/Content/images/down.png")" />
+        <div id="subcat" class="subcat">
+            <ul class="price-range-selector">
+                @foreach (var item in p)
+                {
+                    <li><a href="@item.FilterUrl">@item.ValueName</a></li>
+                }
+            </ul>
+        </div>
+    </li>
+        }
+    }
+}

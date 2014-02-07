@@ -1,0 +1,122 @@
+﻿@model QuickOrderModel
+@using Nop.Web.Models.Checkout;
+@using Nop.Core.Infrastructure;
+
+@{
+    var storeLocation = EngineContext.Current.Resolve<Nop.Core.IWebHelper>().GetStoreLocation();
+}
+<div id="pu-quickorder" class="modal hide fade">
+    <div>
+        <!-- FORM DAT HANG -->
+        <div class="modal-header">
+            <a class="close" href="javascript:void(0)" onclick="$.fancybox.close();">&times;</a>
+            <h4>THÔNG TIN ĐẶT HÀNG CỦA BẠN
+            </h4>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="quickorder">
+            <!-- ĐẶT HÀNG THÔNG THƯỜNG-->
+            <div class="product-info">
+                <input type="hidden" id="hfProductVariantId" name="hfProductVariantId" value="@Model.ProductVariantId" />
+                <img src="@Model.ImageUrl" alt="@Model.Name" />
+                <label>
+                    @Model.Name
+                </label>
+                <p><span class="price">@Model.Price</span>
+                @if (Model.OldPrice != "")
+                {
+                    <cite>@Model.OldPrice</cite>
+                }
+                </p>
+            </div>
+            <div class="product-info-hr"></div>
+            <ol>
+                <li id="opc-payment_info" class="tab-section"  style="display: none;">
+                <div class="step-title">
+                    <span class="number">3</span>
+                    <h2>@T("Checkout.PaymentInfo")</h2>
+                </div>
+                <div id="checkout-step-payment-info" class="step a-item" style="display: none;">
+                    <form action="" id="co-payment-info-form">
+                    <div id="checkout-payment-info-load">
+                        @*payment info content will be loaded here*@ Payment is not required
+                    </div>
+                    </form>
+                    <script type="text/javascript">
+                        PaymentInfo.init('#co-payment-info-form', '@(storeLocation)checkout/OpcSaveQuickPaymentInfo/');
+                    </script>
+                    <div class="buttons" id="payment-info-buttons-container">
+                        <p class="back-link">
+                            <a href="#" onclick="Checkout.back(); return false;"><small>&laquo; </small>@T("Common.Back")</a></p>
+                        <input type="button" class="button-1 payment-info-next-step-button" onclick="PaymentInfo.save()" value="@T("Common.Continue")" />
+                        <span class="please-wait" id="payment-info-please-wait" style="display: none;">@T("Common.LoadingNextStep")</span>
+                    </div>
+                </div>
+            </li>
+            </ol>
+            <script>
+                PaymentInfo.save();
+            </script>
+            <form id="frmCatQuickOrder">
+                @Html.Action("QuickOrderSummary", "ShoppingCart", new { quickorder = Model})
+            </form>
+        </div>
+        <script type="text/javascript">
+            debugger;
+            $('#frmCatQuickOrder input, #frmCatQuickOrder textarea').focus(function () {
+                if ($(this).attr('name') == 'BillingAddress.LastName' || $(this).attr('name') == 'BillingAddress.PhoneNumber') {
+                    $(this).parent().find('.formerror').text('Thông tin bắt buộc điền');
+                }
+                $('#frmCatQuickOrder .formerror,#frmCatQuickOrder .help').hide();
+                if ($(this).val().length == 0) {
+                    $(this).parent().find('.formerror,.help').fadeIn(300);
+                }
+            });
+
+            $('#frmCatQuickOrder input, #frmCatQuickOrder textarea').keyup(function () {
+                $('#frmCatQuickOrder .formerror,#frmCatQuickOrder .help').hide();
+                if ($(this).val().length == 0) {
+                    $(this).parent().find('.formerror,.help').fadeIn(300);
+                }
+            });
+            @*var ColorCode = "";
+            if (sColorCode != undefined)
+                ColorCode = sColorCode;
+            ChangeColor_v3(ColorCode, @ViewBag.ProductCode, @Model.productIDField.ToString(), @Model.productCategoryBOField.categoryIDField);
+                *@
+        </script>
+    </div>
+    <a id="openfancyquick" href="#pu-quickorder" style="display: none">openfancy</a>
+</div>
+<style type="text/css">
+    .fancybox-skin {
+        background: none;
+    }
+
+    span.caption {
+        font-size: 11px;
+        font-weight: normal;
+        color: #666;
+        display: block;
+        line-height: 11px;
+    }
+
+    .buy-button2 {
+        background-color: #f68b24;
+        background-image: linear-gradient(top, #f8a134, #f47715);
+        background-image: -moz-linear-gradient(top, #f8a134, #f47715);
+        border: 1px solid #cc891d;
+        border-radius: 2px;
+        color: #fff !important;
+        float: none;
+        font-size: 18px;
+        height: 35px;
+        line-height: 35px;
+        text-align: center;
+        text-transform: uppercase;
+        text-shadow: 1px 1px rgba(0, 0, 0, 0.25);
+        width: 120px;
+        padding: 0 10px;
+    }
+</style>

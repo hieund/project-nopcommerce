@@ -1,0 +1,61 @@
+﻿@model NewsCategoryListModel
+@using Telerik.Web.Mvc.UI
+@{
+    var gridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSize;
+
+    //page title
+    ViewBag.Title = "Quản lý danh mục tin tức";
+}
+<div class="section-header">
+    <div class="title">
+        <img src="@Url.Content("~/Administration/Content/images/ico-content.png")" alt="" />
+        Quản lý danh mục tin tức
+    </div>
+    <div class="options">
+        <a href="@Url.Action("CreateCategory")" class="t-button">@T("Admin.Common.AddNew")</a>
+    </div>
+</div>
+<p>
+</p>
+<table class="adminContent">
+    <tr>
+        <td>
+            @(Html.Telerik().Grid<NewsCategoryModel>(Model.NewsCategories.Data)
+                    .Name("categories-grid")
+                    .ClientEvents(events => events
+                        .OnDataBinding("onDataBinding"))
+                    .Columns(columns =>
+                    {
+                        columns.Bound(x => x.Breadcrumb).Title(T("Admin.News.Categories.Fields.Name").Text);
+                        columns.Bound(x => x.Published)
+                            .Template(
+                                @<img alt="" src="@Url.Content("~/Administration/Content/images/active-" + item.Published.ToString().ToLowerInvariant() + ".gif")" />
+                            )
+                            .ClientTemplate("<img alt='' src='" + Url.Content("~/Administration/Content/images/") + "active-<#= Published #>.gif' />")
+                            .Centered()
+                            .Width(100);
+                        columns.Bound(x => x.DisplayOrder)
+                            .Width(100)
+                            .Centered();
+                        columns.Bound(x => x.Id)
+                            .Width(50)
+                            .Centered()
+                            .Template(x => Html.ActionLink(T("Admin.Common.Edit").Text, "EditCategory", new { id = x.Id }))
+                            .ClientTemplate("<a href=\"Edit/<#= Id #>\">" + T("Admin.Common.Edit").Text + "</a>")
+                            .Title(T("Admin.Common.Edit").Text);
+                    })
+                    .Pageable(settings => settings.Total(Model.NewsCategories.Total).PageSize(gridPageSize).Position(GridPagerPosition.Both))
+                    .DataBinding(dataBinding => dataBinding.Ajax().Select("CategoryList", "News"))
+                    .EnableCustomBinding(true))
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    function onDataBinding(e) {
+        var searchModel = {
+            SearchCategoryName: $('#@Html.FieldIdFor(model => model.SearchCategoryName)').val()
+        };
+        e.data = searchModel;
+    }
+</script>

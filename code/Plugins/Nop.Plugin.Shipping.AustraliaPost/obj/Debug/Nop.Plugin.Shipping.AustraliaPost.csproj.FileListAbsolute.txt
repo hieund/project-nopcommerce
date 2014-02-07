@@ -1,0 +1,7 @@
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Shipping.AustraliaPost\Description.txt
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Shipping.AustraliaPost\logo.jpg
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Shipping.AustraliaPost\Nop.Plugin.Shipping.AustraliaPost.dll
+E:\sancovn.com\code\Presentation\Nop.Web\Plugins\Shipping.AustraliaPost\Nop.Plugin.Shipping.AustraliaPost.pdb
+E:\sancovn.com\code\Plugins\Nop.Plugin.Shipping.AustraliaPost\obj\Debug\Nop.Plugin.Shipping.AustraliaPost.csprojResolveAssemblyReference.cache
+E:\sancovn.com\code\Plugins\Nop.Plugin.Shipping.AustraliaPost\obj\Debug\Nop.Plugin.Shipping.AustraliaPost.dll
+E:\sancovn.com\code\Plugins\Nop.Plugin.Shipping.AustraliaPost\obj\Debug\Nop.Plugin.Shipping.AustraliaPost.pdb

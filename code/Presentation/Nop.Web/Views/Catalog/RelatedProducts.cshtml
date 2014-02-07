@@ -1,0 +1,29 @@
+﻿@model IList<ProductOverviewModel>
+
+@using Nop.Web.Models.Catalog;
+@if (Model.Count > 0)
+{
+    @*<div class="related-products-grid product-grid">
+        <div class="title">
+            <strong>@T("Products.RelatedProducts")</strong>
+        </div>
+        @foreach (var item in Model)
+        {
+            <div class="item-box">@Html.Partial("_ProductBox", item)</div>
+        }
+    </div>*@
+    <div class="profuntion">
+        <div class="titleview">Sản phẩm cùng tính năng</div>
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li>
+                    @Html.Partial("_ProductBoxDetail", item)
+                </li>
+            }
+            <li>
+            <p align="right"> <a href="@Url.RouteUrl("Category", new { SeName = ViewBag.CategoryUrl })" class="linkblue">Xem tất cả </a></p>
+            </li>
+        </ul>
+        </div>
+}

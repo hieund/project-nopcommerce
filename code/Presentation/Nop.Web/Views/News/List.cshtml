@@ -1,0 +1,72 @@
+﻿@model NewsItemListModel
+@using Nop.Web.Extensions;
+@using Nop.Web.Models.News;
+@{
+    Layout = "~/Views/Shared/_Root.cshtml";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.NewsArchive").Text);
+}
+@*<div class="page news-list-page">
+    <div class="page-title">
+        <a href="@Url.RouteUrl("NewsRSS", new { languageId = Model.WorkingLanguageId })" class="link-rss" title="@T("News.RSS.Hint")">@T("News.RSS")</a>
+        <h1>@T("News")</h1>
+    </div>
+    <div class="page-body">
+        @Html.Widget("newslist_page_before_items")
+        <div class="news-items">
+            @foreach (var item in Model.NewsItems)
+            {
+                <div class="item">
+                    <div class="news-head">
+                        <a class="news-title" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">
+                            @item.Title</a> <span class="news-date">-
+                            @item.CreatedOn.ToString("D")
+                            </span>
+                    </div>
+                    <div class="news-details">
+                        @Html.Raw(item.Short)
+                    </div>
+                    <a href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })" class="read-more">
+                        @T("News.MoreInfo")</a>
+                    @Html.Widget("newslist_page_inside_item")
+                </div>
+            }
+        </div>
+        <div class="pager">
+            @Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber")
+        </div>
+        @Html.Widget("newslist_page_after_items")
+    </div>
+</div>*@
+
+<div class="nav">
+    <a href="@Url.RouteUrl("HomePage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top") </a>&rsaquo; @T("News")</div>
+@if(Model.NewsItems.Count > 0)
+{
+<div class="content">
+    @Html.Action("TopHotNews")
+    <div class="contentrow">
+        <div class="contentleft">
+            <div class="listnews">
+                <ul>
+                @foreach (var item in Model.NewsItems)
+                {
+                    <li><a href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">
+                        <img src="@item.DefaultPictureModel.ImageUrl" alt="@item.DefaultPictureModel.AlternateText" title="@item.DefaultPictureModel.Title" align="left" />
+                    </a>
+                        <h3><a href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">@item.Title</a></h3>
+                        <p class="date1">@item.CreatedOn.ToString("D")</p>
+                        <p>@Html.Raw(item.Short)</p>
+                    </li>
+                }
+                </ul>
+                <div class="pagination">
+                    @Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber")
+                </div>
+            </div>
+        </div>
+        @Html.Action("MostReadNews")
+    </div>
+</div>
+}

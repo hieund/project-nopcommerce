@@ -1,0 +1,66 @@
+﻿@model CategoryModel.ProductPropertyValueMappingModel
+@using (Html.BeginForm("InsertProductPropertyValueMapping", "Category", FormMethod.Post, new { id = "ppvm-form" }))
+{
+    
+@*
+
+    @Html.LabelFor(model => model.SourceId)
+    @Html.HiddenFor(model => model.SourceId)
+    @Html.ValidationMessageFor(model => model.SourceId)
+
+    @Html.LabelFor(model => model.DestinationId)
+    @Html.HiddenFor(model => model.DestinationId)
+    @Html.ValidationMessageFor(model => model.DestinationId)
+
+    @Html.LabelFor(model => model.MappingType)
+    @Html.HiddenFor(model => model.MappingType)
+    @Html.ValidationMessageFor(model => model.MappingType)
+
+    
+    @(
+ Html.Telerik().Combobox()
+    .Name("cbb-property-vaue")
+    .Bindto(new SelectList(ViewBag.ProductPropertyValueList, "Id", "Value"))
+    .HtmlAttributes(new { style = "width: 200px; float: left; margin-bottom: 280px;" })
+    )*@
+    <div class="form-actions">
+        <button type="submit" class="t-button t-state-default">Submit !</button>
+    </div>
+}
+
+
+<style type="text/css">
+    #ppvm-form-open-button {
+        height: 32px;
+        margin: 2em 0 4em;
+    }
+
+    #ppvm-form {
+        padding: 0 1em 1em;
+    }
+
+        #ppvm-form label {
+            display: block;
+            line-height: 25px;
+            margin-top: 1em;
+        }
+
+        #ppvm-form input {
+            width: 370px;
+        }
+
+    .form-actions {
+        padding-top: 1em;
+        overflow: hidden;
+    }
+
+        .form-actions button {
+            float: right;
+        }
+
+    .example .t-group {
+        border-width: 1px;
+        border-style: solid;
+        padding: 0 1em 1em;
+    }
+</style>

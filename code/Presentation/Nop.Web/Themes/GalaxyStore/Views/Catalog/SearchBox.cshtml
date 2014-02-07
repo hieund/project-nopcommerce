@@ -1,0 +1,50 @@
+﻿@model SearchBoxModel
+@using Nop.Web.Models.Catalog;
+@using (Html.BeginRouteForm("ProductSearch", FormMethod.Get, new { onsubmit = "return check_small_search_form()" }))
+{
+@*<input type="text" class="search-box-text" id="small-searchterms" @(Model.AutoCompleteEnabled ? Html.Raw(" autocomplete=\"off\"") : null)
+                value="@T("Search.SearchBox.Tooltip")" name="q"  onfocus="if(this.value=='@T("Search.SearchBox.Tooltip")')this.value=''" onblur="if(this.value=='') {this.value = '@T("Search.SearchBox.Tooltip")';}" />
+    <input type="submit" class="button-1 search-box-button" value="@T("Search")" />*@
+    
+    <input type="text" placeholder="Nhập tên thiết bị bạn cần tìm. Ví dụ: Galaxy S4, Galaxy Tab3, Galaxy Ativ…" class="tfsearch search-box-text" id="small-searchterms" @(Model.AutoCompleteEnabled ? Html.Raw(" autocomplete=\"off\"") : null)
+     name="q"  value="@Request.QueryString["q"]"/>
+    <input type="submit" class="btsearch" value="" />
+    <script type="text/javascript">
+        function check_small_search_form() {
+            var search_terms = $("#small-searchterms");
+            if (search_terms.val() == "") {
+                alert('@Html.Raw(HttpUtility.JavaScriptStringEncode(T("Search.EnterSearchTerms").Text))');
+                search_terms.focus();
+                return false;
+            }
+            return true;
+        }
+            @if (Model.AutoCompleteEnabled)
+            {
+                <text>
+        $(function () {
+            $('#small-searchterms').autocomplete({
+                delay: 100,
+                minLength: '@(Model.SearchTermMinimumLength.ToString())',
+                source: '@(Url.RouteUrl("ProductSearchAutoComplete"))',
+                select: function (event, ui) {
+                    $("#small-searchterms").val(ui.item.label);
+                    setLocation(ui.item.producturl);
+                    return false;
+                }
+            })
+                    .data("ui-autocomplete")._renderItem = function (ul, item) {
+                        var t = item.label;
+                        //html encode
+                        t = htmlEncode(t);
+                        return $("<li></li>")
+                        .data("item.autocomplete", item)
+                        .append("<a>@(Model.ShowProductImagesInSearchAutoComplete ? Html.Raw("<div class='left'><img src='\" + item.productpictureurl + \"'></div>") : null)" + "<div class='right'><p>" + t + "</p><p class=\"price\">" + (item.price == "Từ 0₫" || item.price == "0₫" ? "" : item.price) + "</p></div><div class='clr'></div></a>")
+                    .appendTo(ul);
+                    };
+        });
+        </text>
+            }
+    </script>
+    @Html.Widget("searchbox")
+}

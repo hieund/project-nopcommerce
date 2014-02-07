@@ -1,0 +1,39 @@
+﻿@using Telerik.Web.Mvc.UI;
+@using Nop.Core.Domain.Catalog;
+@using Nop.Services.Catalog;
+
+@{    
+    var productpropertymappingvaluetypeList = new List<SelectListItem>();
+    var item0 = new SelectListItem()
+    {
+        Text = T("Admin.Catelog.PropertyMappingValue.LessThan").Text,
+        Value = "-2"
+    };
+    var item1 = new SelectListItem()
+    {
+        Text = T("Admin.Catelog.PropertyMappingValue.LessThanOrEqual").Text,
+        Value = "-1"
+    };
+    var item2 = new SelectListItem()
+    {
+        Text = T("Admin.Catelog.PropertyMappingValue.Equal").Text,
+        Value = "0"
+    };
+    var item3 = new SelectListItem()
+    {
+        Text = T("Admin.Catelog.PropertyMappingValue.GreaterOrEqual").Text,
+        Value = "1"
+    };
+    var item4 = new SelectListItem()
+    {
+        Text = T("Admin.Catelog.PropertyMappingValue.Greater").Text,
+        Value = "2"
+    };
+    productpropertymappingvaluetypeList.Add(item0);
+    productpropertymappingvaluetypeList.Add(item1);
+    productpropertymappingvaluetypeList.Add(item2);
+    productpropertymappingvaluetypeList.Add(item3);
+    productpropertymappingvaluetypeList.Add(item4);
+}
+
+@Html.Telerik().DropDownList().Name("PropertyMappingValueType").BindTo(productpropertymappingvaluetypeList).HtmlAttributes(new { style = "width:100px" }).ClientEvents(events=>events.OnChange("onChangePropertyMappingValueType"))
