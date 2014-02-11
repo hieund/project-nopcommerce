@@ -16,6 +16,7 @@
         registerUrl = webHelper.ModifyQueryString(registerUrl, "returnurl=" + HttpUtility.UrlEncode(this.Context.Request.QueryString["returnUrl"]), null);
     }
 }
+@section META_INC {}
 <div class="page login-page">
     <div class="page-title">
         <h1>@T("Account.Login.Welcome")</h1>
@@ -34,8 +35,8 @@
                         @Html.Action("TopicBlock", "Topic", new { systemName = "CheckoutAsGuestOrRegister" })
                     </div>
                     <div class="buttons">
-                        <input type="button" class="button-1 checkout-as-guest-button" onclick="location.href='@Url.RouteUrl("Checkout")'" value="@T("Account.Login.CheckoutAsGuest")" />
-                        <input type="button" class="button-1 register-button" onclick="location.href='@registerUrl'" value="@T("Account.Register")" />
+                        <input type="button" class="button-1 checkout-as-guest-button" onclick="location.href='@Url.RouteUrl("Checkout")    '" value="@T("Account.Login.CheckoutAsGuest")" />
+                        <input type="button" class="button-1 register-button" onclick="location.href='@registerUrl    '" value="@T("Account.Register")" />
                     </div>
                 </div>
             }
@@ -49,7 +50,7 @@
                         @T("Account.Login.NewCustomerText")
                     </div>
                     <div class="buttons">
-                        <input type="button" class="button-1 register-button" onclick="location.href='@registerUrl'" value="@T("Account.Register")" />
+                        <input type="button" class="button-1 register-button" onclick="location.href='@registerUrl    '" value="@T("Account.Register")" />
                     </div>
                 </div>
             }
@@ -66,7 +67,7 @@
                         if (Model.UsernamesEnabled)
                         {
                         <div class="inputs">
-                            @Html.LabelFor(m => m.Username, new { }, ":") 
+                            @Html.LabelFor(m => m.Username, new { }, ":")
                             @Html.TextBoxFor(m => m.Username, new { @class = "username", autofocus = "autofocus" })
                             @Html.ValidationMessageFor(m => m.Username)
                         </div>
