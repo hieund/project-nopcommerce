@@ -40,7 +40,7 @@ namespace Nop.Web
         {
             routes.IgnoreRoute("favicon.ico");
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            
+
             //register custom routes (plugins, etc)
             var routePublisher = EngineContext.Current.Resolve<IRoutePublisher>();
             routePublisher.RegisterRoutes(routes);
@@ -92,7 +92,7 @@ namespace Nop.Web
             {
                 GlobalFilters.Filters.Add(new ProfilingActionFilter());
             }
-            
+
             //fluent validation
             DataAnnotationsModelValidatorProvider.AddImplicitRequiredAttributeForValueTypes = false;
             ModelValidatorProviders.Providers.Add(new FluentValidationModelValidatorProvider(new NopValidatorFactory()));
@@ -119,7 +119,7 @@ namespace Nop.Web
 
             EnsureDatabaseIsInstalled();
 
-            if (DataSettingsHelper.DatabaseIsInstalled() && 
+            if (DataSettingsHelper.DatabaseIsInstalled() &&
                 EngineContext.Current.Resolve<StoreInformationSettings>().DisplayMiniProfilerInPublicStore)
             {
                 MiniProfiler.Start();
@@ -149,7 +149,7 @@ namespace Nop.Web
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
-        { 
+        {
             //we don't do it in Application_BeginRequest because a user is not authenticated yet
             SetWorkingCulture();
         }
@@ -183,7 +183,7 @@ namespace Nop.Web
                 }
             }
         }
-        
+
         protected void EnsureDatabaseIsInstalled()
         {
             var webHelper = EngineContext.Current.Resolve<IWebHelper>();
@@ -243,7 +243,7 @@ namespace Nop.Web
         {
             if (exc == null)
                 return;
-            
+
             if (!DataSettingsHelper.DatabaseIsInstalled())
                 return;
 
